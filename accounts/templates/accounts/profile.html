@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}My Profile - Campus Exchange{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow p-4 mt-4">
+            <div class="d-flex align-items-center gap-4 mb-4 pb-4 border-bottom border-secondary-subtle">
+                <!-- Profile Picture (default avatar check) -->
+                {% if user.profile.profile_picture %}
+                    <img src="{{ user.profile.profile_picture.url }}" alt="Profile Pic" class="rounded-circle border border-2 border-info" style="width: 100px; height: 100px; object-fit: cover;">
+                {% else %}
+                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center border border-2 border-info text-white fs-1 fw-bold" style="width: 100px; height: 100px;">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
+                {% endif %}
+                
+                <div>
+                    <h2 class="fw-bold mb-1" style="font-family: 'Outfit', sans-serif;">{{ user.username|capfirst }}</h2>
+                    <p class="text-info mb-1">{{ user.college_email }}</p>
+                    <span class="badge {% if user.is_verified %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                        {% if user.is_verified %}Verified Student{% else %}Pending Verification{% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Profile Edit Form -->
+            <h4 class="fw-bold mb-3" style="font-family: 'Outfit', sans-serif;">Edit Profile Details</h4>
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ profile_form.branch|as_crispy_field }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ profile_form.year|as_crispy_field }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ profile_form.hostel|as_crispy_field }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ profile_form.phone|as_crispy_field }}
+                    </div>
+                    <div class="col-12">
+                        {{ profile_form.profile_picture|as_crispy_field }}
+                    </div>
+                    <div class="col-12">
+                        {{ profile_form.bio|as_crispy_field }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-custom w-100 mt-3 py-2">Save Profile Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
