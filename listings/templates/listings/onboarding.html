@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome - CampusEx{% endblock %}
+
+{% block content %}
+<style>
+    .onboarding-card {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 3rem 2rem;
+        max-width: 480px;
+        margin: 2rem auto;
+        text-align: center;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .logo-icon-large {
+        color: var(--accent-color);
+        width: 3.5rem;
+        height: 3.5rem;
+        stroke-width: 1.5;
+        margin-bottom: 0.5rem;
+    }
+
+    .onboarding-title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        color: #ffffff;
+    }
+
+    .onboarding-tagline {
+        color: var(--text-secondary);
+        font-size: 0.9375rem;
+        font-weight: 400;
+        margin-top: 0.25rem;
+    }
+
+    /* Carousel Slides styling */
+    .carousel-item-custom {
+        display: none;
+        animation: fadeIn 0.4s ease-in-out forwards;
+        min-height: 140px;
+    }
+
+    .carousel-item-custom.active {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slide-icon {
+        color: var(--accent-color);
+        background-color: rgba(99, 102, 241, 0.08);
+        padding: 0.75rem;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+    }
+
+    .slide-heading {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+    }
+
+    .slide-desc {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        max-width: 280px;
+    }
+
+    /* Dot indicators */
+    .dot-indicators {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin: 1.5rem 0 2.5rem 0;
+    }
+
+    .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: var(--border-color);
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .dot.active {
+        background-color: var(--accent-color);
+        transform: scale(1.3);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="onboarding-card">
+    <!-- Logo & Tagline -->
+    <div class="logo-container">
+        <i data-lucide="shopping-bag" class="logo-icon-large"></i>
+        <h1 class="onboarding-title">CampusEx</h1>
+        <p class="onboarding-tagline">Buy. Sell. Rent. Find. All on campus.</p>
+    </div>
+
+    <!-- Onboarding Slider -->
+    <div class="onboarding-slides">
+        <!-- Slide 1 -->
+        <div class="carousel-item-custom active" id="slide-0">
+            <div class="slide-icon">
+                <i data-lucide="sparkles" style="width: 1.5rem; height: 1.5rem;"></i>
+            </div>
+            <h4 class="slide-heading">Sell what you don't need</h4>
+            <p class="slide-desc">Declutter your room and sell study material, cycles, or electronics easily</p>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-item-custom" id="slide-1">
+            <div class="slide-icon">
+                <i data-lucide="home" style="width: 1.5rem; height: 1.5rem;"></i>
+            </div>
+            <h4 class="slide-heading">Find Roommates & Rooms</h4>
+            <p class="slide-desc">Explore shared hostels, rooms, or list roommate preferences instantly</p>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-item-custom" id="slide-2">
+            <div class="slide-icon">
+                <i data-lucide="shield-check" style="width: 1.5rem; height: 1.5rem;"></i>
+            </div>
+            <h4 class="slide-heading">Verified college students only</h4>
+            <p class="slide-desc">Restricted signup ensures a closed, safe, and highly trusted student community</p>
+        </div>
+    </div>
+
+    <!-- Dots -->
+    <div class="dot-indicators">
+        <span class="dot active" onclick="showSlide(0)"></span>
+        <span class="dot" onclick="showSlide(1)"></span>
+        <span class="dot" onclick="showSlide(2)"></span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex flex-column gap-3">
+        <a href="{% url 'register' %}" class="btn btn-custom w-100 py-2.5 justify-content-center">
+            <span>Get Started</span>
+            <i data-lucide="arrow-right" style="width: 1rem; height: 1rem;"></i>
+        </a>
+        <a href="{% url 'login' %}" class="btn btn-ghost w-100 text-secondary justify-content-center">
+            <span>I already have an account</span>
+        </a>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const totalSlides = 3;
+    const slides = document.querySelectorAll('.carousel-item-custom');
+    const dots = document.querySelectorAll('.dot');
+
+    function showSlide(index) {
+        // Wrap around bounds
+        currentSlide = (index + totalSlides) % totalSlides;
+        
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === currentSlide);
+        });
+
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentSlide);
+        });
+    }
+
+    // Auto rotate every 4 seconds
+    setInterval(() => {
+        showSlide(currentSlide + 1);
+    }, 4000);
+</script>
+{% endblock %}

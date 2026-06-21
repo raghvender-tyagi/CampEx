@@ -1,0 +1,371 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ listing.title }} - CampusEx{% endblock %}
+
+{% block content %}
+<style>
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: color 0.15s ease;
+    }
+
+    .back-btn:hover {
+        color: var(--text-primary);
+    }
+
+    .image-viewer-card {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .main-image-container {
+        height: 380px;
+        background-color: #0E0D12;
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .main-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .thumbnail-scroll {
+        display: flex;
+        gap: 0.5rem;
+        overflow-x: auto;
+        padding-bottom: 0.25rem;
+    }
+
+    .thumbnail-btn {
+        width: 64px;
+        height: 48px;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        background-color: #0E0D12;
+        padding: 0;
+        cursor: pointer;
+        transition: border-color 0.15s ease;
+        flex-shrink: 0;
+    }
+
+    .thumbnail-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+        transition: opacity 0.15s ease;
+    }
+
+    .thumbnail-btn:hover img, .thumbnail-btn.active img {
+        opacity: 1;
+    }
+
+    .thumbnail-btn.active {
+        border-color: var(--accent-color);
+    }
+
+    /* Meta section */
+    .detail-meta-item {
+        font-size: 0.8125rem;
+        color: var(--text-secondary);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .detail-price {
+        font-family: 'Lora', Georgia, serif;
+        font-size: 1.875rem;
+        font-weight: 500;
+        color: var(--accent-color);
+        letter-spacing: -0.01em;
+    }
+
+    .badge-outline {
+        background-color: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        font-size: 0.8125rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+
+    .badge-accent {
+        background-color: rgba(242, 200, 75, 0.1);
+        border: 1px solid var(--accent-color);
+        color: var(--accent-color);
+        font-size: 0.8125rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+
+    .seller-avatar-large {
+        background-color: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        font-size: 1.25rem;
+        font-weight: 600;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contact-item {
+        background-color: #0E0D12;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: border-color 0.15s ease;
+    }
+
+    .contact-item:hover {
+        border-color: var(--accent-color);
+        color: var(--text-primary);
+    }
+</style>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <a href="{% url 'listings:feed' %}" class="back-btn">
+            <i data-lucide="arrow-left" style="width: 1rem; height: 1rem;"></i>
+            <span>Back to marketplace</span>
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Image Gallery (Left Column) -->
+    <div class="col-12 col-lg-6">
+        <div class="image-viewer-card">
+            <!-- Main view -->
+            <div class="main-image-container">
+                {% if primary_image %}
+                    <img id="main-image" src="{{ primary_image.image.url }}" class="main-img" alt="{{ listing.title }}">
+                {% else %}
+                    <div class="text-center text-muted d-flex flex-column align-items-center gap-2">
+                        <i data-lucide="image" style="width: 3rem; height: 3rem; stroke-width: 1;"></i>
+                        <span class="meta-text">No images uploaded for this item</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Thumbnails List -->
+            {% if other_images.count > 1 %}
+                <div class="thumbnail-scroll">
+                    {% for img in other_images %}
+                        <button class="thumbnail-btn {% if forloop.first %}active{% endif %}" onclick="selectThumbnail('{{ img.image.url }}', this)">
+                            <img src="{{ img.image.url }}" alt="">
+                        </button>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Details Column (Right Column) -->
+    <div class="col-12 col-lg-6">
+        <!-- Title and Metadata -->
+        <div class="mb-4">
+            <div class="d-flex align-items-center gap-3 mb-2 flex-wrap">
+                {% if listing.category %}
+                    <span class="detail-meta-item fw-medium" style="color: var(--accent-color);">
+                        {% if listing.category.slug == 'books' %}
+                            <i data-lucide="book" style="width: 0.875rem; height: 0.875rem;"></i>
+                        {% elif listing.category.slug == 'electronics' %}
+                            <i data-lucide="laptop" style="width: 0.875rem; height: 0.875rem;"></i>
+                        {% elif listing.category.slug == 'cycles' %}
+                            <i data-lucide="bike" style="width: 0.875rem; height: 0.875rem;"></i>
+                        {% elif listing.category.slug == 'hostel-essentials' %}
+                            <i data-lucide="home" style="width: 0.875rem; height: 0.875rem;"></i>
+                        {% elif listing.category.slug == 'fashion' %}
+                            <i data-lucide="shirt" style="width: 0.875rem; height: 0.875rem;"></i>
+                        {% else %}
+                            <i data-lucide="pen-tool" style="width: 0.875rem; height: 0.875rem;"></i>
+                        {% endif %}
+                        <span>{{ listing.category.name }}</span>
+                    </span>
+                    <span class="text-muted meta-text">•</span>
+                {% endif %}
+                <span class="detail-meta-item">
+                    <i data-lucide="eye" style="width: 0.875rem; height: 0.875rem;"></i>
+                    <span>{{ listing.views_count }} views</span>
+                </span>
+                <span class="text-muted meta-text">•</span>
+                <span class="detail-meta-item">
+                    <i data-lucide="calendar" style="width: 0.875rem; height: 0.875rem;"></i>
+                    <span>Posted {{ listing.created_at|date:"M d, Y" }}</span>
+                </span>
+            </div>
+            
+            <h1 class="mb-3 text-white">{{ listing.title }}</h1>
+            
+            <!-- Badges & Price Row -->
+            <div class="d-flex align-items-center gap-2 flex-wrap mb-4">
+                <span class="detail-price me-3">
+                    {% if listing.price == 0 %}
+                        {% if listing.listing_type == 'free' %}Free{% else %}Exchange{% endif %}
+                    {% else %}
+                        ₹{{ listing.price|floatformat:0 }}
+                    {% endif %}
+                </span>
+                
+                <span class="badge-accent">For {{ listing.get_listing_type_display }}</span>
+                <span class="badge-outline">Condition: {{ listing.get_condition_display }}</span>
+            </div>
+        </div>
+
+        <!-- Description Box -->
+        <div class="card p-4 mb-4">
+            <h5 class="section-header mb-3">Item Description</h5>
+            <p class="body-text mb-0 text-secondary" style="white-space: pre-line; line-height: 1.6;">
+                {{ listing.description }}
+            </p>
+        </div>
+
+        <!-- Seller and Contact Box -->
+        <div class="card p-4 mb-4">
+            <h5 class="section-header mb-3">Seller Details</h5>
+            
+            <div class="d-flex align-items-center gap-3 mb-4">
+                {% if listing.seller.profile.profile_picture %}
+                    <img src="{{ listing.seller.profile.profile_picture.url }}" class="rounded-circle border border-base" width="48" height="48" alt="" style="object-fit: cover;">
+                {% else %}
+                    <div class="seller-avatar-large">
+                        {{ listing.seller.username|slice:":1"|upper }}
+                    </div>
+                {% endif %}
+                <div class="lh-sm">
+                    <span class="d-block text-white fw-semibold mb-0.5">{{ listing.seller.username }}</span>
+                    <span class="meta-text text-muted">
+                        {% if listing.seller.profile.branch %}
+                            {{ listing.seller.profile.branch }} {% if listing.seller.profile.year %}(Year {{ listing.seller.profile.year }}){% endif %}
+                        {% else %}
+                            Student Member
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Seller Details Grid -->
+            <div class="row g-3 mb-4">
+                <div class="col-6">
+                    <span class="meta-text d-block mb-1">Hostel/Location</span>
+                    <span class="body-text fw-medium text-white d-inline-flex align-items-center gap-1">
+                        <i data-lucide="map-pin" class="text-danger" style="width: 0.875rem; height: 0.875rem;"></i>
+                        <span>{{ listing.hostel_location|default:"Day Scholar" }}</span>
+                    </span>
+                </div>
+                <div class="col-6">
+                    <span class="meta-text d-block mb-1">Status</span>
+                    <span class="body-text fw-medium text-white d-inline-flex align-items-center gap-1">
+                        {% if listing.seller.is_verified %}
+                            <i data-lucide="verified" class="text-primary" style="width: 0.875rem; height: 0.875rem;"></i>
+                            <span>Verified College Account</span>
+                        {% else %}
+                            <i data-lucide="user-check" class="text-muted" style="width: 0.875rem; height: 0.875rem;"></i>
+                            <span>Standard Account</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+            <hr class="border-base my-3">
+
+            <!-- Contact options with auth gate -->
+            {% if user.is_authenticated %}
+                <div class="d-flex flex-column gap-2 mt-3">
+                    <a href="mailto:{{ listing.seller.college_email }}" class="contact-item">
+                        <i data-lucide="mail" class="text-secondary" style="width: 1.125rem; height: 1.125rem;"></i>
+                        <span>{{ listing.seller.college_email }}</span>
+                    </a>
+                    {% if listing.seller.profile.phone %}
+                        <a href="tel:{{ listing.seller.profile.phone }}" class="contact-item">
+                            <i data-lucide="phone" class="text-secondary" style="width: 1.125rem; height: 1.125rem;"></i>
+                            <span>+91 {{ listing.seller.profile.phone }}</span>
+                        </a>
+                        <a href="https://wa.me/91{{ listing.seller.profile.phone }}?text=Hi%20{{ listing.seller.username }},%20I%20am%20interested%20in%20your%20listing%20'{{ listing.title|urlencode }}'%20on%20CampusEx." 
+                           target="_blank" class="contact-item" style="border-color: rgba(16, 185, 129, 0.2); background-color: rgba(16, 185, 129, 0.02);">
+                            <i data-lucide="message-square" class="text-success" style="width: 1.125rem; height: 1.125rem;"></i>
+                            <span class="text-success fw-medium">Chat on WhatsApp</span>
+                        </a>
+                    {% else %}
+                        <div class="p-3 bg-base border border-base rounded-3">
+                            <span class="meta-text text-muted d-block text-center">No phone number listed. Connect via email.</span>
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="p-4 bg-base border border-base rounded-3 text-center">
+                    <p class="meta-text text-muted mb-3">You must login to view seller contact details.</p>
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-custom w-100">
+                        <i data-lucide="lock" style="width: 1rem; height: 1rem;"></i>
+                        <span>Login to Contact</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Danger Zone for Listing Owner -->
+        {% if user == listing.seller %}
+            <div class="card p-4 border-danger border-opacity-20" style="background-color: rgba(239, 68, 68, 0.02);">
+                <h5 class="section-header text-danger mb-2">Danger Zone</h5>
+                <p class="meta-text text-muted mb-3">If this item has been sold or you no longer wish to list it, delete it permanently below.</p>
+                <form action="{% url 'listings:delete' listing.pk %}" method="post" onsubmit="return confirm('Delete this listing permanently? This cannot be undone.');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm border-danger border-opacity-50 text-danger hover-bg-danger d-inline-flex align-items-center gap-2">
+                        <i data-lucide="trash-2" style="width: 0.875rem; height: 0.875rem;"></i>
+                        <span>Delete permanently</span>
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function selectThumbnail(imgUrl, element) {
+        // Change src of main image
+        const mainImg = document.getElementById('main-image');
+        if (mainImg) {
+            mainImg.src = imgUrl;
+        }
+        
+        // Remove active class from all thumbnails
+        const thumbnailButtons = document.querySelectorAll('.thumbnail-btn');
+        thumbnailButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Add active class to selected
+        element.classList.add('active');
+    }
+</script>
+{% endblock %}

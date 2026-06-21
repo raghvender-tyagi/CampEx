@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     #local apps
     'accounts',
+    'listings',
 ]
 
 MIDDLEWARE = [
@@ -81,3 +82,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# Authentication URLs & Redirects
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'listings:feed'
+LOGOUT_REDIRECT_URL = 'listings:feed'

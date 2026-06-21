@@ -1,58 +1,141 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}My Profile - Campus Exchange{% endblock %}
+{% block title %}My Profile - CampusEx{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow p-4 mt-4">
-            <div class="d-flex align-items-center gap-4 mb-4 pb-4 border-bottom border-secondary-subtle">
-                <!-- Profile Picture (default avatar check) -->
-                {% if user.profile.profile_picture %}
-                    <img src="{{ user.profile.profile_picture.url }}" alt="Profile Pic" class="rounded-circle border border-2 border-info" style="width: 100px; height: 100px; object-fit: cover;">
-                {% else %}
-                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center border border-2 border-info text-white fs-1 fw-bold" style="width: 100px; height: 100px;">
-                        {{ user.username|slice:":1"|upper }}
-                    </div>
-                {% endif %}
-                
-                <div>
-                    <h2 class="fw-bold mb-1" style="font-family: 'Outfit', sans-serif;">{{ user.username|capfirst }}</h2>
-                    <p class="text-info mb-1">{{ user.college_email }}</p>
-                    <span class="badge {% if user.is_verified %}bg-success{% else %}bg-warning text-dark{% endif %}">
-                        {% if user.is_verified %}Verified Student{% else %}Pending Verification{% endif %}
-                    </span>
-                </div>
-            </div>
+<style>
+    .profile-card {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 2.5rem;
+        max-width: 720px;
+        margin: 0 auto;
+    }
 
-            <!-- Profile Edit Form -->
-            <h4 class="fw-bold mb-3" style="font-family: 'Outfit', sans-serif;">Edit Profile Details</h4>
-            <form method="post" enctype="multipart/form-data" novalidate>
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-md-6">
-                        {{ profile_form.branch|as_crispy_field }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ profile_form.year|as_crispy_field }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ profile_form.hostel|as_crispy_field }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ profile_form.phone|as_crispy_field }}
-                    </div>
-                    <div class="col-12">
-                        {{ profile_form.profile_picture|as_crispy_field }}
-                    </div>
-                    <div class="col-12">
-                        {{ profile_form.bio|as_crispy_field }}
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-custom w-100 mt-3 py-2">Save Profile Changes</button>
-            </form>
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+    }
+
+    .profile-avatar-large {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid var(--border-color);
+    }
+
+    .profile-avatar-placeholder-large {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-primary);
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .badge-status {
+        background-color: rgba(16, 185, 129, 0.08);
+        border: 1px solid #10B981;
+        color: #34D399;
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.1875rem 0.5rem;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .badge-status-pending {
+        background-color: rgba(245, 158, 11, 0.08);
+        border: 1px solid #F59E0B;
+        color: #FBBF24;
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.1875rem 0.5rem;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+</style>
+
+<div class="profile-card shadow-lg">
+    <!-- Profile Header Info -->
+    <div class="profile-header">
+        {% if user.profile.profile_picture %}
+            <img src="{{ user.profile.profile_picture.url }}" alt="Profile Pic" class="profile-avatar-large">
+        {% else %}
+            <div class="profile-avatar-placeholder-large">
+                {{ user.username|slice:":1"|upper }}
+            </div>
+        {% endif %}
+        
+        <div class="lh-sm">
+            <h2 class="h2-title mb-1.5">{{ user.username }}</h2>
+            <p class="text-secondary meta-text mb-2">{{ user.college_email }}</p>
+            <div>
+                {% if user.is_verified %}
+                    <span class="badge-status">
+                        <i data-lucide="verified" style="width: 0.75rem; height: 0.75rem;"></i>
+                        <span>Verified Student</span>
+                    </span>
+                {% else %}
+                    <span class="badge-status-pending">
+                        <i data-lucide="shield-alert" style="width: 0.75rem; height: 0.75rem;"></i>
+                        <span>Pending Verification</span>
+                    </span>
+                {% endif %}
+            </div>
         </div>
     </div>
+
+    <!-- Edit Profile Form -->
+    <h5 class="section-header mb-4">Edit Profile details</h5>
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-md-6">
+                {{ profile_form.branch|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ profile_form.year|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ profile_form.hostel|as_crispy_field }}
+            </div>
+            <div class="col-md-6">
+                {{ profile_form.phone|as_crispy_field }}
+            </div>
+            <div class="col-12">
+                {{ profile_form.profile_picture|as_crispy_field }}
+            </div>
+            <div class="col-12">
+                {{ profile_form.bio|as_crispy_field }}
+            </div>
+        </div>
+        
+        <hr class="border-base my-4">
+        
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="{% url 'listings:feed' %}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-custom px-4 py-2">
+                <i data-lucide="save" style="width: 1rem; height: 1rem;"></i>
+                <span>Save Changes</span>
+            </button>
+        </div>
+    </form>
 </div>
 {% endblock %}

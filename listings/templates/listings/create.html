@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Post Item - CampusEx{% endblock %}
+
+{% block content %}
+<style>
+    .create-card {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 2.5rem;
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .form-header-icon {
+        color: var(--accent-color);
+        margin-bottom: 0.75rem;
+    }
+
+    /* Custom Dashed File Upload */
+    .upload-zone {
+        border: 1px dashed var(--border-color);
+        border-radius: 8px;
+        background-color: #0E0D12;
+        padding: 2rem;
+        text-align: center;
+        transition: border-color 0.15s ease, background-color 0.15s ease;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .upload-zone:hover {
+        border-color: var(--accent-color);
+        background-color: rgba(242, 200, 75, 0.02);
+    }
+
+    .upload-icon {
+        color: var(--text-secondary);
+        margin-bottom: 0.75rem;
+    }
+
+    /* Custom styling to overrides django crispy-forms defaults for dark theme */
+    .asteriskField {
+        color: var(--accent-color);
+        margin-left: 0.125rem;
+    }
+
+    .invalid-feedback {
+        color: #EF4444 !important;
+        font-size: 0.8125rem;
+    }
+</style>
+
+<div class="create-card shadow-lg">
+    
+    <div class="form-header">
+        <i data-lucide="plus-circle" class="form-header-icon" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+        <h2 class="h2-title mb-1">List an Item</h2>
+        <p class="text-muted meta-text mb-0">Create a new listing for students to view in the campus feed</p>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Standard fields via Crispy -->
+        <div class="mb-4">
+            {{ form|crispy }}
+        </div>
+        
+        <!-- Multi-image Upload Zone -->
+        <div class="mb-4">
+            <label class="form-label">Upload Images</label>
+            <div class="upload-zone" onclick="document.getElementById('images').click();">
+                <i data-lucide="upload-cloud" class="upload-icon" style="width: 2rem; height: 2rem; stroke-width: 1.5;"></i>
+                <p class="body-text text-light mb-1 fw-medium">Choose files to upload</p>
+                <span class="meta-text text-muted d-block mb-3">Drag & drop files or click to browse</span>
+                
+                <input type="file" name="images" id="images" class="form-control d-none" multiple accept="image/*" onchange="updateUploadLabel(this)">
+                
+                <div id="file-list-preview" class="meta-text text-info fw-medium"></div>
+            </div>
+            <small class="meta-text text-muted d-block mt-2">
+                Tip: You can select and upload multiple images. The first image will be set as primary.
+            </small>
+        </div>
+        
+        <hr class="border-base my-4">
+        
+        <!-- Actions -->
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="{% url 'listings:feed' %}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-custom px-4 py-2">
+                <i data-lucide="check" style="width: 1rem; height: 1rem;"></i>
+                <span>Publish Listing</span>
+            </button>
+        </div>
+    </form>
+    
+</div>
+
+<script>
+    function updateUploadLabel(input) {
+        const fileList = input.files;
+        const previewDiv = document.getElementById('file-list-preview');
+        if (fileList.length > 0) {
+            previewDiv.innerHTML = `<i data-lucide="file-check" style="width: 0.875rem; height: 0.875rem; display: inline-block; vertical-align: middle; margin-right: 0.25rem;"></i> Selected ${fileList.length} files`;
+            lucide.createIcons();
+        } else {
+            previewDiv.innerHTML = '';
+        }
+    }
+</script>
+{% endblock %}
