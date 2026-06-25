@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Messages - CampusEx{% endblock %}
+
+{% block content %}
+<style>
+    .inbox-container {
+        max-width: 720px;
+        margin: 0 auto;
+    }
+
+    .conversation-card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-decoration: none !important;
+        transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .conversation-card:hover {
+        background-color: var(--bg-card-hover);
+        border-color: rgba(108, 99, 255, 0.25);
+    }
+
+    .avatar-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 1.125rem;
+        flex-shrink: 0;
+    }
+
+    .conversation-details {
+        flex-grow: 1;
+        min-width: 0; /* Ensures truncation works */
+    }
+
+    .conversation-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .other-name {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 0.9375rem;
+    }
+
+    .listing-context-text {
+        font-weight: 400;
+        color: var(--text-secondary);
+        font-size: 0.8125rem;
+    }
+
+    .message-preview {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-preview.unread {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    .meta-aside {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .unread-badge {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var(--accent);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+    }
+
+    .empty-icon {
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="inbox-container">
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <i data-lucide="message-square" style="color: var(--accent); width: 1.75rem; height: 1.75rem;"></i>
+        <h2 class="h2-title mb-0">Messages</h2>
+    </div>
+
+    {% if conversations %}
+        <div class="conversation-list">
+            {% for convo in conversations %}
+                {% if request.user == convo.buyer %}
+                    {% with other_user=convo.seller %}
+                        <a href="{% url 'messaging:conversation' convo.pk %}" class="conversation-card">
+                            {% if other_user.profile.profile_picture %}
+                                <img src="{{ other_user.profile.profile_picture.url }}" alt="{{ other_user.username }}" class="avatar-circle" style="object-fit: cover;">
+                            {% else %}
+                                <div class="avatar-circle">
+                                    {{ other_user.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="conversation-details">
+                                <div class="conversation-header">
+                                    <span class="other-name">
+                                        {{ other_user.username }} 
+                                        {% if convo.listing %}
+                                            <span class="listing-context-text">• {{ convo.listing.title|truncatechars:25 }}</span>
+                                        {% else %}
+                                            <span class="listing-context-text">• General Chat</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="message-preview {% if convo.unread_count_val > 0 %}unread{% endif %}">
+                                    {% if convo.last_message %}
+                                        {{ convo.last_message.body|truncatechars:60 }}
+                                    {% else %}
+                                        <em>No messages yet. Click to chat!</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="meta-aside">
+                                <span class="meta-text text-muted">
+                                    {% if convo.last_message %}
+                                        {{ convo.last_message.created_at|timesince }} ago
+                                    {% else %}
+                                        {{ convo.created_at|timesince }} ago
+                                    {% endif %}
+                                </span>
+                                {% if convo.unread_count_val > 0 %}
+                                    <div class="unread-badge"></div>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endwith %}
+                {% else %}
+                    {% with other_user=convo.buyer %}
+                        <a href="{% url 'messaging:conversation' convo.pk %}" class="conversation-card">
+                            {% if other_user.profile.profile_picture %}
+                                <img src="{{ other_user.profile.profile_picture.url }}" alt="{{ other_user.username }}" class="avatar-circle" style="object-fit: cover;">
+                            {% else %}
+                                <div class="avatar-circle">
+                                    {{ other_user.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="conversation-details">
+                                <div class="conversation-header">
+                                    <span class="other-name">
+                                        {{ other_user.username }} 
+                                        {% if convo.listing %}
+                                            <span class="listing-context-text">• {{ convo.listing.title|truncatechars:25 }}</span>
+                                        {% else %}
+                                            <span class="listing-context-text">• General Chat</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="message-preview {% if convo.unread_count_val > 0 %}unread{% endif %}">
+                                    {% if convo.last_message %}
+                                        {{ convo.last_message.body|truncatechars:60 }}
+                                    {% else %}
+                                        <em>No messages yet. Click to chat!</em>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="meta-aside">
+                                <span class="meta-text text-muted">
+                                    {% if convo.last_message %}
+                                        {{ convo.last_message.created_at|timesince }} ago
+                                    {% else %}
+                                        {{ convo.created_at|timesince }} ago
+                                    {% endif %}
+                                </span>
+                                {% if convo.unread_count_val > 0 %}
+                                    <div class="unread-badge"></div>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endwith %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i data-lucide="message-square-off" class="empty-icon" style="width: 3rem; height: 3rem;"></i>
+            <h4 class="h5-title mb-2">No conversations yet</h4>
+            <p class="text-secondary meta-text mb-4">You can message sellers directly from their listing pages.</p>
+            <a href="{% url 'listings:feed' %}" class="btn btn-custom">
+                <span>Browse listings</span>
+                <i data-lucide="arrow-right" style="width: 1rem; height: 1rem;"></i>
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

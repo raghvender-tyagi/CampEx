@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import CustomUserCreationForm
 
@@ -34,3 +34,29 @@ def profile(request):
         profile_form = UserProfileForm(instance=request.user.profile)
         
     return render(request, 'accounts/profile.html', {'profile_form': profile_form})
+
+from django.contrib.auth import get_user_model
+from listings.models import Listing
+
+User = get_user_model()
+
+def public_profile(request, username):
+    other_user = get_object_or_404(User, username=username)
+    active_listings = other_user.listings.filter(status='available').order_by('-created_at')
+    
+    allowed_domains = ['@kiet.edu', '@mycollege.in']
+    is_email_validated = any(other_user.college_email.endswith(domain) for domain in allowed_domains)
+    show_verified = other_user.is_active and is_email_validated
+
+    wishlisted_ids = set()
+    if request.user.is_authenticated:
+        wishlisted_ids = set(request.user.wishlist_items.values_list('listing_id', flat=True))
+
+    context = {
+        'other_user': other_user,
+        'active_listings': active_listings,
+        'active_listings_count': active_listings.count(),
+        'show_verified': show_verified,
+        'wishlisted_ids': wishlisted_ids,
+    }
+    return render(request, 'accounts/public_profile.html', context)

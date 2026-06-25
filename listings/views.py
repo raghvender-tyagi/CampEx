@@ -38,6 +38,10 @@ def listing_feed(request):
     if listing_type:
         listings = listings.filter(listing_type=listing_type)
 
+    wishlisted_ids = set()
+    if request.user.is_authenticated:
+        wishlisted_ids = set(request.user.wishlist_items.values_list('listing_id', flat=True))
+
     context = {
         'listings': listings,
         'near_listings': near_listings,
@@ -46,6 +50,7 @@ def listing_feed(request):
         'selected_category': category_slug,
         'selected_type': listing_type,
         'query': query,
+        'wishlisted_ids': wishlisted_ids,
     }
     return render(request, 'listings/feed.html', context)
 
@@ -130,8 +135,52 @@ def my_listings(request):
 @login_required
 def mark_status(request, pk, status):
     listing = get_object_or_404(Listing, pk=pk, seller=request.user)
+    old_status = listing.status
     if status in ['available', 'sold', 'rented']:
         listing.status = status
         listing.save(update_fields=['status'])
         messages.success(request, f"Listing status updated to {status.capitalize()}.")
+        
+        # Trigger notifications if status changed to 'sold'
+        if status == 'sold' and old_status != 'sold':
+            from notifications.models import Notification
+            wishlist_users = listing.wishlisted_by.values_list('user', flat=True)
+            for user_id in wishlist_users:
+                Notification.objects.create(
+                    recipient_id=user_id,
+                    notification_type='wishlist_sold',
+                    title=f"{listing.title} has been sold",
+                    target_url=f"/profile/{listing.seller.username}/"
+                )
     return redirect('listings:my_listings')
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from .models import Wishlist
+
+@login_required
+@require_POST
+def toggle_wishlist(request, pk):
+    listing = get_object_or_404(Listing, pk=pk)
+    wishlist_item = Wishlist.objects.filter(user=request.user, listing=listing)
+    if wishlist_item.exists():
+        wishlist_item.delete()
+        wishlisted = False
+    else:
+        Wishlist.objects.create(user=request.user, listing=listing)
+        wishlisted = True
+    
+    count = Wishlist.objects.filter(listing=listing).count()
+    return JsonResponse({
+        'wishlisted': wishlisted,
+        'count': count
+    })
+
+@login_required
+def wishlist_page(request):
+    wishlists = Wishlist.objects.filter(user=request.user).select_related('listing').order_by('-saved_at')
+    listings = [w.listing for w in wishlists]
+    return render(request, 'listings/wishlist.html', {
+        'listings': listings,
+        'wishlist_count': len(listings)
+    })

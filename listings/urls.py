@@ -10,4 +10,6 @@ urlpatterns = [
     path('listing/<int:pk>/delete/', views.listing_delete, name='delete'),
     path('my-listings/', views.my_listings, name='my_listings'),
     path('listing/<int:pk>/status/<str:status>/', views.mark_status, name='mark_status'),
+    path('listing/<int:pk>/wishlist/', views.toggle_wishlist, name='toggle_wishlist'),
+    path('wishlist/', views.wishlist_page, name='wishlist'),
 ]

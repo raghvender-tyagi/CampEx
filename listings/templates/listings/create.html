@@ -6,8 +6,8 @@
 {% block content %}
 <style>
     .create-card {
-        background-color: var(--surface-color);
-        border: 1px solid var(--border-color);
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-subtle);
         border-radius: 12px;
         padding: 2.5rem;
         max-width: 680px;
@@ -20,15 +20,15 @@
     }
 
     .form-header-icon {
-        color: var(--accent-color);
+        color: var(--accent);
         margin-bottom: 0.75rem;
     }
 
     /* Custom Dashed File Upload */
     .upload-zone {
-        border: 1px dashed var(--border-color);
+        border: 1px dashed var(--border-subtle);
         border-radius: 8px;
-        background-color: #0E0D12;
+        background-color: var(--bg-input);
         padding: 2rem;
         text-align: center;
         transition: border-color 0.15s ease, background-color 0.15s ease;
@@ -37,8 +37,8 @@
     }
 
     .upload-zone:hover {
-        border-color: var(--accent-color);
-        background-color: rgba(242, 200, 75, 0.02);
+        border-color: var(--accent);
+        background-color: rgba(108, 99, 255, 0.02);
     }
 
     .upload-icon {
@@ -48,7 +48,7 @@
 
     /* Custom styling to overrides django crispy-forms defaults for dark theme */
     .asteriskField {
-        color: var(--accent-color);
+        color: var(--accent);
         margin-left: 0.125rem;
     }
 

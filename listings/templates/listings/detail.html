@@ -4,6 +4,24 @@
 
 {% block content %}
 <style>
+    @media (max-width: 991.98px) {
+        body {
+            padding-bottom: 80px;
+        }
+    }
+
+    .sticky-action-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--bg-nav);
+        border-top: 1px solid var(--border-subtle);
+        padding: 0.875rem 1rem;
+        z-index: 1000;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
+    }
+
     .back-btn {
         display: inline-flex;
         align-items: center;
@@ -20,8 +38,8 @@
     }
 
     .image-viewer-card {
-        background-color: var(--surface-color);
-        border: 1px solid var(--border-color);
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-subtle);
         border-radius: 12px;
         padding: 1rem;
         display: flex;
@@ -31,7 +49,7 @@
 
     .main-image-container {
         height: 380px;
-        background-color: #0E0D12;
+        background-color: var(--bg-input);
         border-radius: 8px;
         overflow: hidden;
         display: flex;
@@ -58,7 +76,7 @@
         border-radius: 6px;
         overflow: hidden;
         border: 2px solid transparent;
-        background-color: #0E0D12;
+        background-color: var(--bg-input);
         padding: 0;
         cursor: pointer;
         transition: border-color 0.15s ease;
@@ -78,7 +96,7 @@
     }
 
     .thumbnail-btn.active {
-        border-color: var(--accent-color);
+        border-color: var(--accent);
     }
 
     /* Meta section */
@@ -94,13 +112,13 @@
         font-family: 'Lora', Georgia, serif;
         font-size: 1.875rem;
         font-weight: 500;
-        color: var(--accent-color);
+        color: var(--accent);
         letter-spacing: -0.01em;
     }
 
     .badge-outline {
         background-color: rgba(255, 255, 255, 0.04);
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-subtle);
         color: var(--text-primary);
         font-size: 0.8125rem;
         padding: 0.375rem 0.75rem;
@@ -109,9 +127,9 @@
     }
 
     .badge-accent {
-        background-color: rgba(242, 200, 75, 0.1);
-        border: 1px solid var(--accent-color);
-        color: var(--accent-color);
+        background-color: var(--accent-muted);
+        border: 1px solid var(--accent);
+        color: var(--accent);
         font-size: 0.8125rem;
         padding: 0.375rem 0.75rem;
         border-radius: 6px;
@@ -120,7 +138,7 @@
 
     .seller-avatar-large {
         background-color: rgba(255, 255, 255, 0.08);
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-subtle);
         color: var(--text-primary);
         font-size: 1.25rem;
         font-weight: 600;
@@ -133,8 +151,8 @@
     }
 
     .contact-item {
-        background-color: #0E0D12;
-        border: 1px solid var(--border-color);
+        background-color: var(--bg-input);
+        border: 1px solid var(--border-subtle);
         border-radius: 8px;
         padding: 0.75rem 1rem;
         display: flex;
@@ -147,7 +165,7 @@
     }
 
     .contact-item:hover {
-        border-color: var(--accent-color);
+        border-color: var(--accent);
         color: var(--text-primary);
     }
 </style>
@@ -196,7 +214,7 @@
         <div class="mb-4">
             <div class="d-flex align-items-center gap-3 mb-2 flex-wrap">
                 {% if listing.category %}
-                    <span class="detail-meta-item fw-medium" style="color: var(--accent-color);">
+                    <span class="detail-meta-item fw-medium" style="color: var(--accent);">
                         {% if listing.category.slug == 'books' %}
                             <i data-lucide="book" style="width: 0.875rem; height: 0.875rem;"></i>
                         {% elif listing.category.slug == 'electronics' %}
@@ -254,7 +272,7 @@
         <div class="card p-4 mb-4">
             <h5 class="section-header mb-3">Seller Details</h5>
             
-            <div class="d-flex align-items-center gap-3 mb-4">
+            <a href="{% url 'public_profile' listing.seller.username %}" class="d-flex align-items-center gap-3 mb-4 text-decoration-none">
                 {% if listing.seller.profile.profile_picture %}
                     <img src="{{ listing.seller.profile.profile_picture.url }}" class="rounded-circle border border-base" width="48" height="48" alt="" style="object-fit: cover;">
                 {% else %}
@@ -272,7 +290,7 @@
                         {% endif %}
                     </span>
                 </div>
-            </div>
+            </a>
 
             <!-- Seller Details Grid -->
             <div class="row g-3 mb-4">
@@ -301,6 +319,20 @@
 
             <!-- Contact options with auth gate -->
             {% if user.is_authenticated %}
+                {% if user != listing.seller %}
+                    <form action="{% url 'messaging:start_conversation' listing.pk %}" method="post" class="mb-3">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-custom w-100 py-2.5 d-flex align-items-center justify-content-center gap-2">
+                            <i data-lucide="message-square" style="width: 1.125rem; height: 1.125rem;"></i>
+                            <span>Contact Seller (Chat)</span>
+                        </button>
+                    </form>
+                {% else %}
+                    <div class="p-3 bg-base border border-base rounded-3 mb-3 text-center">
+                        <span class="meta-text text-muted">This is your listing</span>
+                    </div>
+                {% endif %}
+
                 <div class="d-flex flex-column gap-2 mt-3">
                     <a href="mailto:{{ listing.seller.college_email }}" class="contact-item">
                         <i data-lucide="mail" class="text-secondary" style="width: 1.125rem; height: 1.125rem;"></i>
@@ -326,8 +358,8 @@
                 <div class="p-4 bg-base border border-base rounded-3 text-center">
                     <p class="meta-text text-muted mb-3">You must login to view seller contact details.</p>
                     <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-custom w-100">
-                        <i data-lucide="lock" style="width: 1rem; height: 1rem;"></i>
-                        <span>Login to Contact</span>
+                        <i data-lucide="lock" style="width: 1rem; height: 1rem; margin-right: 0.25rem;"></i>
+                        <span>Login to contact seller</span>
                     </a>
                 </div>
             {% endif %}
@@ -347,6 +379,42 @@
                 </form>
             </div>
         {% endif %}
+    </div>
+</div>
+
+<!-- Sticky Bottom Action Bar (Mobile only) -->
+<div class="sticky-action-bar d-lg-none">
+    <div class="container d-flex align-items-center justify-content-between gap-3">
+        <div>
+            <span class="meta-text text-secondary d-block">Price</span>
+            <span class="fw-semibold text-white fs-5">
+                {% if listing.price == 0 %}
+                    {% if listing.listing_type == 'free' %}Free{% else %}Exchange{% endif %}
+                {% else %}
+                    ₹{{ listing.price|floatformat:0 }}
+                {% endif %}
+            </span>
+        </div>
+        <div class="flex-grow-1" style="max-width: 280px;">
+            {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-custom w-100 py-2">
+                    <i data-lucide="lock" style="width: 1rem; height: 1rem; margin-right: 0.25rem;"></i>
+                    <span>Contact Seller</span>
+                </a>
+            {% elif user == listing.seller %}
+                <div class="text-end text-muted meta-text py-2">
+                    <span>This is your listing</span>
+                </div>
+            {% else %}
+                <form action="{% url 'messaging:start_conversation' listing.pk %}" method="post" class="m-0">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-custom w-100 py-2">
+                        <i data-lucide="message-square" style="width: 1rem; height: 1rem; margin-right: 0.25rem;"></i>
+                        <span>Contact Seller</span>
+                    </button>
+                </form>
+            {% endif %}
+        </div>
     </div>
 </div>
 

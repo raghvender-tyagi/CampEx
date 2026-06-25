@@ -13,15 +13,15 @@
     .search-group {
         display: flex;
         align-items: center;
-        background-color: var(--surface-color);
-        border: 1px solid var(--border-color);
+        background-color: var(--bg-input);
+        border: 1px solid var(--border-input);
         border-radius: 8px;
         padding: 0.25rem;
         transition: border-color 0.15s ease;
     }
     
     .search-group:focus-within {
-        border-color: var(--accent-color);
+        border-color: var(--accent);
     }
     
     .search-icon-addon {
@@ -46,9 +46,9 @@
     }
     
     .search-btn {
-        background-color: var(--accent-color);
+        background-color: var(--accent);
         border: none;
-        color: #0E0D12;
+        color: var(--text-on-accent);
         font-size: 0.875rem;
         font-weight: 600;
         padding: 0.5rem 1.25rem;
@@ -92,45 +92,51 @@
         align-items: center;
         justify-content: center;
         transition: transform 0.15s ease, border-color 0.15s ease;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-subtle);
+        background-color: var(--bg-card);
+        color: var(--text-secondary);
     }
     .category-square-item:hover .category-square-icon {
         transform: translateY(-2px);
         border-color: var(--text-secondary);
     }
     .category-square-item.active .category-square-icon {
-        border-color: var(--accent-color);
-        box-shadow: 0 0 0 2px rgba(242, 200, 75, 0.1);
+        background-color: var(--accent-muted) !important;
+        color: var(--accent) !important;
+        border-color: var(--accent) !important;
+        box-shadow: 0 0 0 2px var(--accent-muted);
     }
     .category-square-label {
         font-size: 0.75rem;
         font-weight: 500;
         text-align: center;
         white-space: nowrap;
+        color: var(--text-muted);
+    }
+    .category-square-item.active .category-square-label {
+        color: var(--accent);
     }
 
-    /* Category Icon Color Tints (Custom Tones per request) */
-    .cat-all { background-color: rgba(158, 154, 166, 0.08); color: #9E9AA6; }
-    .cat-books { background-color: rgba(52, 211, 153, 0.08); color: #34D399; }
-    .cat-electronics { background-color: rgba(96, 165, 250, 0.08); color: #60A5FA; }
-    .cat-cycles { background-color: rgba(251, 191, 36, 0.08); color: #FBBF24; }
-    .cat-hostel { background-color: rgba(251, 113, 133, 0.08); color: #FB7185; }
-    .cat-fashion { background-color: rgba(192, 132, 252, 0.08); color: #C084FC; }
-    .cat-stationery { background-color: rgba(250, 204, 21, 0.08); color: #FACC15; }
+    /* Category Icon Color Tints (Custom Tones mapped to keep system neutral & clean) */
+    .cat-all, .cat-books, .cat-electronics, .cat-cycles, .cat-hostel, .cat-fashion, .cat-stationery {
+        background-color: var(--bg-card) !important;
+        color: var(--text-secondary) !important;
+    }
 
     /* Category Gradient Placeholders for items with no image */
-    .grad-books { background: linear-gradient(135deg, rgba(52, 211, 153, 0.05), rgba(16, 185, 129, 0.2)); color: #34D399; }
-    .grad-electronics { background: linear-gradient(135deg, rgba(96, 165, 250, 0.05), rgba(59, 130, 246, 0.2)); color: #60A5FA; }
-    .grad-cycles { background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), rgba(245, 158, 11, 0.2)); color: #FBBF24; }
-    .grad-hostel { background: linear-gradient(135deg, rgba(251, 113, 133, 0.05), rgba(244, 63, 94, 0.2)); color: #FB7185; }
-    .grad-fashion { background: linear-gradient(135deg, rgba(192, 132, 252, 0.05), rgba(167, 139, 250, 0.2)); color: #C084FC; }
-    .grad-stationery { background: linear-gradient(135deg, rgba(250, 204, 21, 0.05), rgba(234, 179, 8, 0.2)); color: #FACC15; }
-    .grad-default { background: linear-gradient(135deg, rgba(158, 154, 166, 0.05), rgba(107, 114, 128, 0.2)); color: #9E9AA6; }
+    .grad-books, .grad-electronics, .grad-cycles, .grad-hostel, .grad-fashion, .grad-stationery {
+        background: linear-gradient(135deg, rgba(108, 99, 255, 0.05), rgba(108, 99, 255, 0.2)) !important;
+        color: var(--accent) !important;
+    }
+    .grad-default {
+        background: linear-gradient(135deg, rgba(158, 154, 166, 0.05), rgba(107, 114, 128, 0.2));
+        color: var(--text-secondary);
+    }
 
     /* Deal Type Filter Pills */
     .filter-pill {
-        background-color: var(--surface-color);
-        border: 1px solid var(--border-color);
+        background-color: transparent;
+        border: 1px solid var(--border-subtle);
         color: var(--text-secondary);
         font-size: 0.8125rem;
         font-weight: 500;
@@ -141,21 +147,21 @@
     }
 
     .filter-pill:hover {
-        color: var(--text-primary);
-        border-color: var(--text-secondary);
+        color: var(--accent);
+        border-color: var(--accent);
     }
 
     .filter-pill.active {
-        background-color: var(--accent-color);
-        border-color: var(--accent-color);
-        color: #0E0D12;
+        background-color: var(--accent);
+        border-color: var(--accent);
+        color: var(--text-on-accent);
         font-weight: 600;
     }
 
     /* Listing Card Refined */
     .listing-card {
-        background-color: var(--surface-color);
-        border: 1px solid var(--border-color);
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-subtle);
         border-radius: 12px;
         overflow: hidden;
         transition: transform 0.15s ease, border-color 0.15s ease;
@@ -166,14 +172,15 @@
 
     .listing-card:hover {
         transform: translateY(-2px);
-        border-color: #3d3947;
+        background-color: var(--bg-card-hover);
+        border-color: rgba(108, 99, 255, 0.25); /* 25% opacity accent border */
     }
 
     .listing-image-container {
         position: relative;
         width: 100%;
         aspect-ratio: 4/3;
-        background-color: #0E0D12;
+        background-color: var(--bg-input);
         overflow: hidden;
         display: flex;
         align-items: center;
@@ -190,28 +197,67 @@
         position: absolute;
         top: 10px;
         left: 10px;
-        background-color: rgba(14, 13, 18, 0.65);
-        color: var(--text-secondary);
+        background-color: #252535 !important;
+        color: var(--text-secondary) !important;
         font-size: 11px;
         font-weight: 500;
         padding: 3px 8px;
         border-radius: 4px;
         backdrop-filter: blur(4px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-subtle) !important;
     }
 
     .badge-deal-type-top-right {
         position: absolute;
         top: 10px;
-        right: 10px;
-        background-color: var(--accent-color);
-        color: #0E0D12;
+        right: 48px;
+        background-color: var(--accent-muted) !important;
+        color: var(--accent) !important;
         font-size: 11px;
         font-weight: 600;
         padding: 3px 8px;
         border-radius: 4px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+    }
+
+    .wishlist-heart-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(18, 18, 24, 0.6);
+        border: 1px solid var(--border-subtle);
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        transition: transform 0.2s ease, background 0.2s ease;
+        padding: 0;
+        color: var(--text-secondary);
+    }
+
+    .wishlist-heart-btn:hover {
+        transform: scale(1.1);
+        background: rgba(18, 18, 24, 0.8);
+        color: var(--text-primary);
+    }
+
+    .wishlist-heart-btn.saved {
+        color: var(--accent);
+        border-color: rgba(108, 99, 255, 0.3);
+    }
+
+    .wishlist-heart-btn svg {
+        transition: fill 0.2s ease, stroke 0.2s ease;
+    }
+
+    .wishlist-heart-btn.saved svg {
+        fill: var(--accent) !important;
+        stroke: var(--accent) !important;
     }
 
     .listing-card-body {
@@ -231,19 +277,19 @@
     }
 
     .card-title-link:hover {
-        color: var(--accent-color);
+        color: var(--accent);
     }
 
     .card-price-serif {
         font-family: 'Lora', Georgia, serif;
-        font-weight: 500;
+        font-weight: 700;
         font-size: 1.125rem;
-        color: var(--accent-color);
+        color: var(--accent);
     }
 
     .card-location-muted {
         font-size: 0.75rem;
-        color: var(--text-secondary);
+        color: var(--text-muted);
     }
 
     /* Grid & Layout rhythms */
@@ -440,6 +486,14 @@
                         <span class="badge-category-top-left">{{ listing.category.name }}</span>
                     {% endif %}
                     <span class="badge-deal-type-top-right">{{ listing.get_listing_type_display }}</span>
+                    
+                    <button class="wishlist-heart-btn {% if listing.pk in wishlisted_ids %}saved{% endif %}" 
+                            data-listing-id="{{ listing.pk }}" 
+                            data-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+                            onclick="event.preventDefault(); toggleWishlist(this, {{ listing.pk }});"
+                            title="Add to Wishlist">
+                        <i data-lucide="heart" style="width: 1rem; height: 1rem; {% if listing.pk in wishlisted_ids %}fill: var(--accent); stroke: var(--accent);{% endif %}"></i>
+                    </button>
                 </div>
                 
                 <div class="listing-card-body">
@@ -497,6 +551,14 @@
                         <span class="badge-category-top-left">{{ listing.category.name }}</span>
                     {% endif %}
                     <span class="badge-deal-type-top-right">{{ listing.get_listing_type_display }}</span>
+                    
+                    <button class="wishlist-heart-btn {% if listing.pk in wishlisted_ids %}saved{% endif %}" 
+                            data-listing-id="{{ listing.pk }}" 
+                            data-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+                            onclick="event.preventDefault(); toggleWishlist(this, {{ listing.pk }});"
+                            title="Add to Wishlist">
+                        <i data-lucide="heart" style="width: 1rem; height: 1rem; {% if listing.pk in wishlisted_ids %}fill: var(--accent); stroke: var(--accent);{% endif %}"></i>
+                    </button>
                 </div>
                 
                 <div class="listing-card-body">
@@ -534,4 +596,51 @@
         {% endfor %}
     </div>
 </div>
+
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+<script>
+function toggleWishlist(button, listingId) {
+    if (button.getAttribute('data-logged-in') === 'false') {
+        window.location.href = "{% url 'login' %}?next=" + window.location.pathname;
+        return;
+    }
+    
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    fetch(`/listing/${listingId}/wishlist/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (response.status === 403 || response.status === 401) {
+            window.location.href = "{% url 'login' %}?next=" + window.location.pathname;
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.wishlisted !== undefined) {
+            const heartIcon = button.querySelector('svg') || button.querySelector('i');
+            if (data.wishlisted) {
+                button.classList.add('saved');
+                if (heartIcon) {
+                    heartIcon.style.fill = 'var(--accent)';
+                    heartIcon.style.stroke = 'var(--accent)';
+                }
+            } else {
+                button.classList.remove('saved');
+                if (heartIcon) {
+                    heartIcon.style.fill = 'none';
+                    heartIcon.style.stroke = 'currentColor';
+                }
+            }
+        }
+    })
+    .catch(err => console.error(err));
+}
+</script>
 {% endblock %}

@@ -13,7 +13,7 @@
 
     .status-tabs {
         display: flex;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-subtle);
         margin-bottom: 2rem;
         gap: 1.5rem;
     }
@@ -36,7 +36,7 @@
     }
 
     .status-tab.active {
-        color: var(--accent-color);
+        color: var(--accent);
     }
 
     .status-tab.active::after {
@@ -46,7 +46,7 @@
         left: 0;
         right: 0;
         height: 2px;
-        background-color: var(--accent-color);
+        background-color: var(--accent);
     }
 
     .badge-count {
@@ -59,14 +59,14 @@
     }
 
     .status-tab.active .badge-count {
-        background-color: rgba(242, 200, 75, 0.15);
-        color: var(--accent-color);
+        background-color: var(--accent-muted);
+        color: var(--accent);
     }
 
     /* List view rows */
     .listing-row {
-        background-color: var(--surface-color);
-        border: 1px solid var(--border-color);
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-subtle);
         border-radius: 12px;
         padding: 1.25rem;
         margin-bottom: 1rem;
@@ -78,7 +78,7 @@
     }
 
     .listing-row:hover {
-        border-color: rgba(242, 200, 75, 0.25);
+        border-color: rgba(108, 99, 255, 0.25);
     }
 
     .listing-row-left {
@@ -93,8 +93,8 @@
         height: 64px;
         border-radius: 8px;
         object-fit: cover;
-        background-color: #0E0D12;
-        border: 1px solid var(--border-color);
+        background-color: var(--bg-input);
+        border: 1px solid var(--border-subtle);
     }
 
     .row-thumbnail-placeholder {
@@ -102,7 +102,7 @@
         height: 64px;
         border-radius: 8px;
         background-color: rgba(255, 255, 255, 0.04);
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-subtle);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -118,7 +118,7 @@
     }
 
     .row-title:hover {
-        color: var(--accent-color);
+        color: var(--accent);
     }
 
     .row-meta {
@@ -126,14 +126,14 @@
         align-items: center;
         gap: 0.75rem;
         font-size: 0.8125rem;
-        color: var(--text-secondary);
+        color: var(--text-muted);
         margin-top: 0.25rem;
         flex-wrap: wrap;
     }
 
     .row-price {
         font-family: 'Lora', Georgia, serif;
-        color: var(--accent-color);
+        color: var(--accent);
         font-weight: 500;
         font-size: 1rem;
     }

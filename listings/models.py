@@ -56,3 +56,16 @@ class ListingImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.listing.title}"
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                              related_name='wishlist_items')
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE,
+                                 related_name='wishlisted_by')
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'listing')
+
+    def __str__(self):
+        return f"{self.user.username} saved {self.listing.title}"

@@ -10,18 +10,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400..600;1,400..600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0E0D12;
-            --surface-color: #17151C;
-            --border-color: #221F2B;
-            --accent-color: #F2C84B;
-            --accent-hover: #E1B93C;
-            --text-primary: #E6E4EB;
-            --text-secondary: #9E9AA6;
+            /* NeetCode.io inspired color tokens */
+            --bg-base: #1E1E2E;
+            --bg-nav: #18181F;
+            --bg-card: #252535;
+            --bg-card-hover: #2D2D42;
+            --bg-input: #1A1A2A;
+            --accent: #6C63FF;
+            --accent-hover: #7B73FF;
+            --accent-muted: #6C63FF1A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0A0B8;
+            --text-muted: #6B6B85;
+            --text-on-accent: #FFFFFF;
+            --border-subtle: #2D2D42;
+            --border-input: #3A3A55;
+
+            /* Legacy variable names mapped to new system to ensure other views inherit colors */
+            --bg-color: var(--bg-base);
+            --surface-color: var(--bg-card);
+            --border-color: var(--border-subtle);
+            --accent-color: var(--accent);
+            --accent-hover: var(--accent-hover);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--bg-base);
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
@@ -84,7 +99,7 @@
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            color: var(--accent-color);
+            color: var(--accent);
             font-weight: 600;
             font-family: 'Inter', sans-serif;
             margin-bottom: 0.5rem;
@@ -93,8 +108,8 @@
 
         /* Navbar Styling */
         .navbar {
-            background-color: var(--bg-color) !important;
-            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-nav) !important;
+            border-bottom: 1px solid var(--border-subtle);
             padding: 0.875rem 0;
         }
 
@@ -110,8 +125,8 @@
             justify-content: center;
             width: 28px;
             height: 28px;
-            background-color: var(--accent-color);
-            color: #0E0D12;
+            background-color: var(--accent);
+            color: var(--text-on-accent);
             font-family: 'Lora', Georgia, serif;
             font-weight: 600;
             font-size: 1.1rem;
@@ -141,8 +156,8 @@
 
         /* Cards */
         .card {
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
             border-radius: 12px;
             color: var(--text-primary);
             overflow: hidden;
@@ -151,9 +166,9 @@
 
         /* Buttons */
         .btn-custom {
-            background-color: var(--accent-color);
-            border: 1px solid var(--accent-color);
-            color: #0E0D12 !important;
+            background-color: var(--accent);
+            border: 1px solid var(--accent);
+            color: var(--text-on-accent) !important;
             font-weight: 600;
             font-size: 0.875rem;
             padding: 0.5rem 1.25rem;
@@ -171,7 +186,7 @@
 
         .btn-outline-custom {
             background-color: transparent;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-subtle);
             color: var(--text-primary) !important;
             font-weight: 500;
             font-size: 0.875rem;
@@ -209,8 +224,8 @@
 
         /* Inputs & Forms */
         .form-control, .form-select, .form-control:focus, .form-select:focus {
-            background-color: #0E0D12 !important;
-            border: 1px solid var(--border-color) !important;
+            background-color: var(--bg-input) !important;
+            border: 1px solid var(--border-input) !important;
             color: var(--text-primary) !important;
             border-radius: 8px;
             font-size: 0.875rem;
@@ -218,8 +233,8 @@
         }
 
         .form-control:focus, .form-select:focus {
-            border-color: var(--accent-color) !important;
-            box-shadow: 0 0 0 2px rgba(242, 200, 75, 0.1) !important;
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 0 2px var(--accent-muted) !important;
             outline: none;
         }
 
@@ -231,13 +246,13 @@
         }
 
         .text-muted {
-            color: var(--text-secondary) !important;
+            color: var(--text-muted) !important;
         }
 
         /* Alerts */
         .alert {
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
             color: var(--text-primary);
             border-radius: 8px;
             font-size: 0.875rem;
@@ -253,7 +268,7 @@
         }
 
         .alert-warning {
-            border-left: 3px solid #F59E0B;
+            border-left: 3px solid #FF7B73;
         }
 
         .alert-info {
@@ -262,21 +277,21 @@
 
         /* Custom helper styles */
         .border-base {
-            border-color: var(--border-color) !important;
+            border-color: var(--border-subtle) !important;
         }
         
         .bg-base {
-            background-color: var(--bg-color) !important;
+            background-color: var(--bg-base) !important;
         }
 
         .bg-surface {
-            background-color: var(--surface-color) !important;
+            background-color: var(--bg-card) !important;
         }
 
         footer {
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-subtle);
             padding: 1.5rem 0;
-            background-color: var(--bg-color);
+            background-color: var(--bg-base);
             margin-bottom: 60px; /* Space for bottom nav on mobile */
         }
         
@@ -292,8 +307,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: var(--surface-color);
-            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-subtle);
             z-index: 1030;
             padding: 0.5rem 0;
             display: flex;
@@ -319,8 +334,8 @@
         }
 
         .bottom-nav-post-btn {
-            background-color: var(--accent-color);
-            color: #0E0D12 !important;
+            background-color: var(--accent);
+            color: var(--text-on-accent) !important;
             width: 42px;
             height: 42px;
             border-radius: 12px;
@@ -328,7 +343,7 @@
             align-items: center;
             justify-content: center;
             margin-top: -1.25rem;
-            box-shadow: 0 4px 12px rgba(242, 200, 75, 0.2);
+            box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
             transition: transform 0.15s ease;
         }
 
@@ -346,9 +361,21 @@
                 <span class="brand-monogram">C</span>
                 <span class="brand-text">CampusEx</span>
             </a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="d-flex align-items-center gap-2 d-lg-none">
+                {% if user.is_authenticated %}
+                    <a class="nav-link position-relative py-2 px-2" href="{% url 'notifications:list' %}" title="Notifications" style="color: var(--text-secondary);">
+                        <i data-lucide="bell" style="width: 1.25rem; height: 1.25rem;"></i>
+                        {% if unread_notification_count > 0 %}
+                            <span class="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.55rem; padding: 0.2em 0.4em;">
+                                {{ unread_notification_count }}
+                            </span>
+                        {% endif %}
+                    </a>
+                {% endif %}
+                <button class="navbar-toggler border-0 p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <!-- Left Nav Links -->
                 <ul class="navbar-nav me-auto ms-lg-3">
@@ -369,6 +396,34 @@
                             <a class="btn btn-ghost" href="{% url 'listings:my_listings' %}">
                                 <i data-lucide="folder" style="width: 1rem; height: 1rem;"></i>
                                 <span>My Listings</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-ghost position-relative py-2 px-3" href="{% url 'listings:wishlist' %}" title="Wishlist">
+                                <i data-lucide="heart" style="width: 1rem; height: 1rem;"></i>
+                                <span class="d-lg-none ms-2">Wishlist</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-ghost position-relative py-2 px-3" href="{% url 'messaging:inbox' %}" title="Inbox">
+                                <i data-lucide="message-square" style="width: 1rem; height: 1rem;"></i>
+                                {% if unread_message_count > 0 %}
+                                    <span class="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem; padding: 0.25em 0.5em; z-index: 10;">
+                                        {{ unread_message_count }}
+                                    </span>
+                                {% endif %}
+                                <span class="d-lg-none ms-2">Messages</span>
+                            </a>
+                        </li>
+                        <li class="nav-item me-lg-2">
+                            <a class="btn btn-ghost position-relative py-2 px-3" href="{% url 'notifications:list' %}" title="Notifications">
+                                <i data-lucide="bell" style="width: 1rem; height: 1rem;"></i>
+                                {% if unread_notification_count > 0 %}
+                                    <span class="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem; padding: 0.25em 0.5em; z-index: 10;">
+                                        {{ unread_notification_count }}
+                                    </span>
+                                {% endif %}
+                                <span class="d-lg-none ms-2">Notifications</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -429,15 +484,20 @@
             <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
             <span>Home</span>
         </a>
-        <a href="#" class="bottom-nav-item">
+        <a href="{% url 'listings:wishlist' %}" class="bottom-nav-item">
             <i data-lucide="heart" style="width: 1.25rem; height: 1.25rem;"></i>
             <span>Wishlist</span>
         </a>
         <a href="{% url 'listings:create' %}" class="bottom-nav-post-btn">
             <i data-lucide="plus" style="width: 1.5rem; height: 1.5rem; stroke-width: 2.5;"></i>
         </a>
-        <a href="#" class="bottom-nav-item">
+        <a href="{% url 'messaging:inbox' %}" class="bottom-nav-item position-relative">
             <i data-lucide="message-square" style="width: 1.25rem; height: 1.25rem;"></i>
+            {% if unread_message_count > 0 %}
+                <span class="position-absolute top-0 start-50 translate-middle-y badge rounded-pill bg-danger" style="font-size: 0.6rem; padding: 0.2em 0.4em; margin-left: 8px; z-index: 10;">
+                    {{ unread_message_count }}
+                </span>
+            {% endif %}
             <span>Chats</span>
         </a>
         <a href="{% url 'profile' %}" class="bottom-nav-item">

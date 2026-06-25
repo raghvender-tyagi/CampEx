@@ -1,0 +1,630 @@
+
+Campus Exchange
+
+Product & UX Plan — Page by Page
+
+Wireframe-level layout for every screen, designed the way professional marketplace apps (OLX, Facebook Marketplace) structure their UX
+
+How to read this document
+Har page ka layout top-se-bottom diya gaya hai — bilkul wahi order jisme user ko screen pe dikhega. Har screen ke saath ek annotation table hai jo batati hai ki har element professionally kaise/kyun design hota hai (jaise OLX, Facebook Marketplace, Cult.fit karte hain).
+
+Note:   Ye purely product/UX plan hai — page layouts, user flow, aur design reasoning. Database models aur Django code ke liye pehle wala roadmap doc dekho.
+
+Complete page list
+UI element
+Behaviour / why it's designed this way
+1. Splash + Onboarding
+First-time app open — sets context before login
+2. Register / Login
+College email verification gate
+3. Home Feed
+Main landing screen after login
+4. Category Browse
+Drilled-down listing grid by category
+5. Search Results + Filters
+Query-based discovery with sort/filter
+6. Listing Detail
+Single product page — the conversion point
+7. Create Listing (multi-step)
+Seller's posting flow
+8. My Listings Dashboard
+Seller's control center
+9. Seller Profile
+Public-facing trust page
+10. Chat / Messages
+Buyer-seller conversation
+11. Wishlist
+Saved items
+12. Rental Request Flow
+Date-based booking for rentals
+13. Roommate Finder
+Preference-based matching
+14. Lost & Found
+Community utility board
+15. Notifications
+Activity feed
+16. My Profile / Settings
+Account management
+17. Admin Dashboard
+Internal moderation panel
+
+PAGE 1   Splash & onboarding
+
+Layout — top to bottom
+App logo + tagline (centered)
+• "Campus Exchange" wordmark
+• Tagline: "Buy. Sell. Rent. Find. All on campus."
+3-slide carousel (swipeable)
+• Slide 1: "Sell what you don't need"
+• Slide 2: "Find roommates & rooms"
+• Slide 3: "Verified college students only"
+Primary button — Get Started
+• Full-width, solid fill, goes to Register
+Secondary link — I already have an account
+• Text link, goes to Login
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Carousel slides
+Sets expectation before asking for login — reduces drop-off (same pattern as Swiggy, OLX first-open)
+Skippable
+Returning users can tap "I already have an account" immediately — never trap the user
+No login wall yet
+Onboarding builds trust before asking for college email — asking too early feels invasive
+
+PAGE 2   Register & login
+
+Layout — Register screen
+Header — Create your account
+• Back arrow top-left
+• Title centered
+Full name field
+• Single-line text input
+College email field
+• Placeholder: yourname@college.edu
+• Inline validation badge appears as user types
+Password field
+• Show/hide eye icon
+• Strength meter bar below (weak/medium/strong)
+Branch + Year dropdowns (side by side)
+• e.g. "CSE" + "2nd Year"
+Terms checkbox
+• "I agree to Community Guidelines"
+Primary button — Create Account
+• Disabled (greyed) until college email validates
+Divider — "Already have an account? Log in"
+
+Layout — Email verification screen (shown right after registration)
+Icon — mail/envelope, centered
+"Check your inbox"
+• "We sent a verification link to name@college.edu"
+Resend link button (with 30s cooldown timer)
+"Open Gmail" shortcut button
+• Optional convenience deep link
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+College email inline check
+Validates domain (@college.edu) live as user types — same UX as Slack workspace sign-up, instant feedback beats failing on submit
+Disabled button until valid
+Prevents wasted submit attempts — sets the expectation upfront that this is a closed community
+Separate verification screen
+Account exists but is unverified/inactive until email confirmed — keeps bots and fake accounts out, same as LinkedIn/Coursera student verification flows
+Branch/Year captured at signup
+Powers search filters later (Page 5) — collect once, reuse everywhere
+
+Login screen — simpler, returning user
+College email field
+Password field + Forgot password? link
+Primary button — Log in
+"New here? Create an account"
+
+PAGE 3   Home feed
+
+Layout — top to bottom
+Top navbar
+• Logo (left) — Notification bell, Chat icon, Profile avatar (right)
+Search bar + Filter button
+• Tappable search input (placeholder: "Search study table, roommate...")
+• Filter icon opens Page 5 filter panel
+Category icon row (horizontal scroll)
+• Electronics, Furniture, Books, Hostel Essentials, Rooms, Travel, Services, Others
+• Each = circular icon + label, tap goes to Page 4
+Promo / announcement banner (optional)
+• e.g. "50+ new listings this week"
+Section label — "Near your hostel"
+• Personalized based on user's hostel in profile
+Listing card
+• Image thumbnail
+• Title (1 line, truncated)
+• Price (bold)
+• Location + posted time (small grey text)
+• Heart icon top-right (wishlist toggle)
+Listing card
+• Same structure
+• "For rent" badge if rental type
+Section label — "Latest listings"
+• Infinite scroll grid below, 2 columns
+Bottom navigation bar (sticky)
+• Home — Categories — [+] Post (center, raised) — Wishlist — Profile
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Search bar is tap-only (not focus-on-load)
+Tapping opens a dedicated search screen with keyboard — avoids layout jump, same as Instagram/Amazon search entry pattern
+Category icons before listings
+Lets users self-filter by intent immediately ("I want furniture") instead of scrolling everything — core OLX/Facebook Marketplace pattern
+"Near your hostel" personalization
+Uses profile data (Phase 1) to surface relevant local listings first — increases relevance, reduces irrelevant scroll
+Heart icon directly on card
+One-tap save without opening the listing — reduces friction, standard e-commerce pattern (Amazon, Flipkart wishlist)
+Floating [+] Post button in bottom nav
+Center-raised button is the single most prominent CTA — sellers are the supply side, so posting must be effortless to reach from anywhere
+2-column grid, not list
+Mobile-first marketplaces always use grid for browsing (visual scanning is faster than reading list rows) — list view reserved for search results only
+
+PAGE 4   Category browse
+
+Layout — top to bottom
+Header — Back arrow + Category name
+• e.g. "Electronics"
+Sub-category chips (horizontal scroll)
+• e.g. within Electronics: Laptops, Monitors, Phones, Accessories
+• Tapping a chip filters in place (no new page)
+Sort + Filter bar
+• "Sort: Latest ▾"   "Filter (2) ▾"
+• Result count: "142 results"
+Listing grid (2 columns, infinite scroll)
+• Same card design as Home feed
+Empty state (if 0 results)
+• Illustration + "No items here yet" + "Be the first to post" CTA
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Sub-category chips, not a new screen
+Narrowing within a category should feel instant — chips filter the same grid in place rather than navigating away
+Result count shown
+Builds trust in the filter system — user sees the filter actually changed something ("142 results" updates live)
+Empty state has a CTA, not just an apology
+Converts a dead-end into a seller opportunity — turns "nothing here" into "you could post here"
+
+PAGE 5   Search results & filters
+
+Layout — Search screen
+Search input (auto-focused, keyboard open)
+• Cancel button top-right
+Recent searches (chips)
+• Shown only when input is empty
+Trending searches
+• e.g. "cycle", "mattress", "roommate"
+Live results list (as user types)
+• Updates after 2+ characters, debounced
+
+Layout — Filter panel (slides up from bottom as a sheet)
+Sheet header — "Filters" + Reset link
+Price range — dual slider
+• Min / Max with live value labels
+Category — checkbox list
+Condition — chip select
+• New / Like New / Good / Fair
+Hostel / Location — dropdown
+Listing type — toggle
+• Sell / Rent / Exchange / Free
+Sticky bottom bar — "Show 87 results" button
+• Live-updating count as filters change
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Filter as bottom sheet, not new page
+Keeps the underlying result context visible/dismissible — standard mobile commerce pattern (Zomato, Myntra, Flipkart all use bottom sheets for filters)
+"Show N results" on the button itself
+User sees the impact of their filter choices before committing — avoids the dead-end of applying filters then finding zero results
+Recent + trending searches on empty state
+Reduces typing effort and surfaces popular intent — same pattern as Amazon/Google search homepage
+
+PAGE 6   Listing detail page
+
+Ye sabse important page hai — yahin user decide karta hai ki contact kare ya nahi. Iska layout sabse zyada thought-through hona chahiye.
+
+Layout — top to bottom
+Image carousel (swipeable, full-width)
+• Dot indicators below
+• Back arrow + Share + Report icon overlaid top
+Title + Price (large, bold)
+• Status badge if sold/rented (e.g. greyed "SOLD" ribbon)
+Quick info chips
+• Condition • Category • Posted 2 days ago • 34 views
+Description section
+• Full text, "Read more" if long
+Location row
+• Map pin icon + "Hostel B, Block 2"
+Seller card
+• Avatar + Name + Branch/Year
+• Star rating + review count
+• "View Profile" link
+• "Member since 2024"
+Similar listings (horizontal scroll)
+• "You may also like" — same category
+Sticky bottom action bar
+• Heart icon (wishlist) + Chat icon (message) + Primary button: "Contact Seller" or "Request Rental"
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Sticky bottom action bar
+The CTA (contact/request) must always be reachable without scrolling back up — this is the page's entire conversion goal, never let it scroll out of view
+Seller card with rating visible here
+Trust signal shown at the decision moment, not buried in a separate tap — buyers decide partly based on seller reputation (Phase 5 reviews feed directly into this card)
+"34 views" social proof
+Mild urgency signal without being manipulative — shows the item is in demand
+Report icon always visible
+Moderation must be one tap away on every listing — never nested in a menu, this is a safety-critical action
+Status badge (SOLD) overlays but doesn't hide
+Sold items stay visible for transparency/history but are clearly non-actionable — button changes to disabled "No longer available"
+Contact Seller vs Request Rental — button text changes
+Same page template serves both sell and rent listings; the CTA text adapts based on listing_type — avoids building two separate detail pages
+
+PAGE 7   Create listing (multi-step)
+
+Multi-step form, ek baar mein ek cheez — taaki form lamba/daunting na lage. Top pe progress bar.
+
+Step 1 of 4 — What are you posting?
+Progress bar (4 dots/segments, step 1 filled)
+Listing type selector — 4 large tappable cards
+• Sell  |  Rent  |  Exchange  |  Give away free
+Category grid (tap to select)
+• Same icons as Home feed
+
+Step 2 of 4 — Photos & details
+Photo upload grid
+• Up to 8 photo slots, first photo marked "Cover"
+• Drag to reorder, tap [+] to add
+Title field
+• Character counter (e.g. 12/80)
+Description textarea
+• Placeholder with example text shown as hint
+Condition selector — chip group
+• New / Like New / Good / Fair
+
+Step 3 of 4 — Price & location
+Price input (large, numeric keypad)
+• If "Rent" selected in step 1: shows Daily/Weekly/Monthly rate tabs instead
+"Negotiable" toggle
+Location — auto-filled from profile hostel
+• Editable dropdown
+
+Step 4 of 4 — Review & post
+Live preview card
+• Exactly how it will appear in the feed
+Edit links next to each section
+• Tap to jump back to that step
+Primary button — "Post Listing"
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+4 short steps instead of 1 long form
+Reduces perceived effort and abandonment — same pattern as OLX/Airbnb listing creation, each screen asks 2-4 things max
+Type selected first (step 1)
+Determines which fields appear later (e.g. rent duration only shows for rentals) — branching logic decided early, not buried mid-form
+Live preview before posting (step 4)
+Lets the seller see exactly what buyers will see — catches typos/bad photos before going live, reduces edit-after-post rate
+Photo upload first in step 2
+Listings with photos get drastically more engagement — prioritizing photo upload nudges sellers to add them before writing text
+Auto-filled location from profile
+Reduces repetitive typing — most students sell from their own hostel, override available but not required
+
+PAGE 8   My listings dashboard
+
+Layout — top to bottom
+Header — "My Listings" + [+] New button
+Status tabs
+• Active (8)  |  Sold (3)  |  Rented (1)  |  Pending Approval (1)
+Listing row (list view, not grid)
+• Thumbnail + Title + Price (left)
+• Views count + Wishlist count (middle, small)
+• 3-dot menu: Edit / Mark Sold / Boost / Delete (right)
+Rental requests badge on relevant listings
+• Small red dot: "2 new requests"
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Status tabs instead of one long list
+Sellers think in terms of "what's still active vs done" — tabs match mental model, same pattern as Amazon Seller Central / OLX "My Ads"
+3-dot menu for actions, not buttons inline
+Keeps the row scannable — destructive actions (delete) are intentionally one tap deeper to prevent accidental taps
+Rental request badge surfaced here
+Sellers manage all their listings from one place — they shouldn't have to remember to check notifications separately for each item
+List view here, grid view on Home
+Sellers managing their own items need to scan title/price/stats quickly (list = faster scanning); buyers browsing need visual recognition (grid = faster visual scan)
+
+PAGE 9   Seller profile (public)
+
+Layout — top to bottom
+Cover area — Avatar (large, centered) + Name
+• Branch, Year, Hostel below name
+Stats row — 3 columns
+• Listings: 14   |   Rating: 4.6 ★ (23)   |   Member since: Aug 2024
+Verified badge
+• Small checkmark icon next to name if college email verified
+"Message" button
+• Primary CTA, opens chat (Page 10)
+Tabs — Active Listings | Reviews
+Listing grid OR Review list (based on tab)
+• Reviews show: reviewer avatar, stars, comment, date
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Verified badge prominent
+Core trust signal for the whole platform's premise (college-only) — must be visually unmissable, not buried in profile details
+Rating + review count next to each other
+"4.6 ★ (23)" — a rating with zero context is meaningless; count tells the buyer how reliable that average is
+No phone/contact info shown directly
+Contact only happens through in-app Message button — protects privacy, prevents the platform being bypassed, and keeps a record for moderation
+
+PAGE 10   Chat / messages
+
+Do screens: Conversation list (inbox) aur individual Chat thread.
+
+Layout — Inbox (conversation list)
+Header — "Messages"
+Conversation row
+• Avatar + Name (left)
+• Last message preview, truncated (middle)
+• Timestamp + unread dot (right)
+Linked listing thumbnail (small, inline)
+• Shows which item the chat is about
+
+Layout — Chat thread
+Header — Avatar + Name + back arrow
+• Tap header to view their profile (Page 9)
+Listing context card (pinned at top)
+• Thumbnail + Title + Price — tap to view listing
+Message bubbles
+• Sent (right, colored) / Received (left, grey)
+• Timestamp on long-press
+Quick reply chips (first message only)
+• "Is this available?" "Can I see more photos?" "What's the lowest price?"
+Text input + Send button (sticky bottom)
+• Attach photo icon
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Listing context card pinned in chat
+Buyer/seller may message about multiple items — pinning the relevant listing avoids confusion about "which item are we even talking about"
+Quick reply chips for first-time message
+Lowers the barrier to start a conversation — many buyers hesitate on what to say first, pre-written prompts increase contact rate (same as Depop, Facebook Marketplace)
+Unread dot in inbox list, not a number badge
+Simple presence indicator is enough at list level; exact count matters more at the app icon/notification level
+
+PAGE 11   Wishlist
+
+Layout
+Header — "Saved Items (12)"
+Grid of saved listing cards
+• Same card design as Home
+• Filled heart icon (tap to remove instantly)
+Sold-item indicator
+• Greyed overlay + "No longer available" if seller marked it sold
+Empty state
+• "Nothing saved yet" + "Browse listings" CTA
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Instant remove, no confirmation dialog
+Wishlist is low-stakes and reversible — adding friction with a confirm popup would be annoying, unlike delete-listing which needs one
+Sold items stay visible but greyed
+Removing them silently would be confusing ("wait, where did it go?") — showing the sold state closes the loop for the user
+
+PAGE 12   Rental request flow
+
+Buyer-side aur Seller-side dono screens.
+
+Layout — Buyer: Request Rental (from Listing Detail)
+Sheet header — "Request to rent"
+Date range picker — calendar widget
+• Start date / End date selection
+Price breakdown
+• Rate × duration = Total (auto-calculated live)
+Optional message to seller
+• Textarea, placeholder: "Any details for the seller?"
+Primary button — "Send Request"
+
+Layout — Seller: Incoming Rental Request
+Request card
+• Requester avatar + name + rating
+• Requested dates + total price
+• Their message (if any)
+Two buttons side by side
+• Decline (outline) | Approve (filled, primary)
+
+Layout — Rental History (both sides)
+Tabs — As Renter | As Owner
+Rental record row
+• Item thumbnail + dates + status badge (Active/Returned/Pending)
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Live price calculation while picking dates
+Removes ambiguity before the buyer commits to sending a request — same as hotel booking apps showing nightly total live
+Approve/Decline as the only two actions
+Binary decision kept simple — no "maybe" state; if seller wants to negotiate, that happens in chat which is always linked
+Separate "As Renter" / "As Owner" tabs
+A student can be both a renter and an owner across different items — separating avoids mixing up who owes what to whom
+
+PAGE 13   Roommate finder
+
+Layout — Browse roommates
+Header + "Post your preference" button
+Filter chips row
+• Budget range, Hostel, Gender preference, Food preference
+Roommate card (list view)
+• Avatar + Name + Branch/Year
+• Budget range, Hostel preference (tags)
+• Smoking/Food preference icons
+• "Message" button
+
+Layout — Post Preference form
+Budget range slider
+Hostel/area preference dropdown
+Room type — chip select
+• Single / Shared / Either
+Smoking preference — toggle
+• Smoker / Non-smoker / No preference
+Food preference — chip select
+• Veg / Non-veg / Either
+Gender preference — chip select
+Primary button — "Post"
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Tags/icons instead of paragraphs
+Roommate compatibility is scannable at a glance — icon for smoking/food lets a user filter visually in 1 second instead of reading every bio
+Filter chips match the fields collected at posting
+Whatever the form collects must be filterable later — keeps post-creation and discovery symmetric
+This is a separate module from buy/sell listings
+Roommate posts have a completely different shape (preferences, not price) — forcing it into the same Listing model/card would confuse both UX and data design
+
+PAGE 14   Lost & found
+
+Layout
+Header + toggle — Lost | Found
+• Two-tab switch at top, not separate pages
+[+] Post a Lost/Found item button
+Item card
+• Photo + Item name + Location seen/lost
+• Date + "2 days ago"
+• "This is mine" / "I found this" button depending on tab
+
+Layout — Claim Request
+Claim form sheet
+• "Describe a unique detail to verify ownership" textarea
+• Optional photo proof upload
+Submit button — "Send Claim"
+• Goes to poster for manual approval, not automatic
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Lost/Found as a toggle, not two menu items
+Both are the same underlying flow (item + location + date) — a toggle keeps it as one mental model instead of two disconnected features
+Claim requires a verifying detail, not just a button tap
+Prevents false claims on valuable items ("prove it's yours") — same anti-fraud pattern as lost-and-found desks in real life
+No price/category fields here
+Lost & Found is explicitly NOT a marketplace listing — keeping it visually and structurally distinct avoids people trying to "sell" found items
+
+PAGE 15   Notifications
+
+Layout
+Header — "Notifications" + "Mark all read" link
+Notification row — icon varies by type
+• Listing approved (check icon)
+• New message (chat icon)
+• Rental request (clock icon)
+• Item sold (tag icon)
+• Wishlist item price drop (heart icon)
+Unread = bold text + colored dot; read = grey
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Icon coding by type
+Lets users scan and prioritize without reading every line — same as Gmail/any inbox pattern
+Tapping a notification deep-links to the relevant page
+e.g. "New message" opens that exact chat thread, not the inbox list — reduces the number of taps to act
+"Mark all read" always visible
+Notification fatigue is real — give users a one-tap way to clear the unread state without dismissing each individually
+
+PAGE 16   My profile & settings
+
+Layout
+Profile header — Avatar (editable) + Name + Edit icon
+Stats row — Listings | Rating | Wishlist count
+Menu list
+• My Listings
+• Rental History
+• Wishlist
+• Reviews I've Given/Received
+• Purchase History
+Settings section
+• Edit Profile, Change Password, Notification Preferences, Privacy
+Support section
+• Report a Problem, Community Guidelines, Help Center
+Logout button
+• Red text, bottom of page, separated by spacing
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Stats row at top of own profile too
+Mirrors the public Seller Profile (Page 9) so the user understands what others see about them
+Logout visually separated + red
+Destructive/exit actions get distinct color and spacing so they're never tapped accidentally while scrolling a menu
+Menu grouped into 3 sections (activity / settings / support)
+Flat un-grouped lists of 12+ items are hard to scan — grouping by purpose follows standard iOS/Android settings conventions
+
+PAGE 17   Admin dashboard (internal)
+
+Ye web-based hota hai (desktop layout), students wali app se alag — Django admin ko customize karke banega.
+
+Layout — top to bottom (desktop)
+Top stat cards (4 across)
+• Total Users | Active Listings | Pending Reports | Pending Approvals
+Left sidebar navigation
+• Users | Listings | Categories | Reports | Reviews | Settings
+Main panel — data table
+• Sortable columns, search bar, bulk-select checkboxes
+• Row actions: View / Approve / Suspend / Delete
+Reports queue (priority view)
+• Reported listing/user + reason + reporter + "Review" button
+
+Why this pattern
+UI element
+Behaviour / why it's designed this way
+Stat cards at top
+Gives moderators an at-a-glance health check before diving into specific records — every admin tool (Stripe, Shopify, Django admin itself) leads with summary metrics
+Bulk-select + bulk actions
+Moderators handle volume (e.g. approving 30 listings) — one-by-one actions don't scale, bulk actions are essential at any real user count
+Reports queue separated from general listing table
+Time-sensitive moderation work needs its own prioritized view, not buried in a generic "all listings" table sorted by date
+
+End-to-end user flow
+Pura journey ek naye user ka, signup se le ke successful sale tak:
+
+1.  Splash screen → taps "Get Started"
+2.  Registers with college email → verifies via email link
+3.  Lands on Home Feed → browses categories or searches
+4.  Taps a listing → views Listing Detail page → checks seller rating
+5.  Taps "Contact Seller" → Chat thread opens with quick-reply chips
+6.  Negotiates in chat → seller marks item as Sold once deal is done
+7.  Buyer leaves a review on Seller Profile → builds trust for future listings
+
+Aur seller-side parallel flow:
+
+1.  Taps [+] Post button from bottom nav (always reachable)
+2.  4-step Create Listing flow → reviews live preview → posts
+3.  Listing appears in Home Feed (after optional admin approval)
+4.  Receives chat messages / rental requests via Notifications
+5.  Manages everything from My Listings Dashboard
+
+Core design principles used throughout
+Bottom nav [+] Post button, sticky Contact Seller bar on Listing Detail: Every primary action is sticky/always-reachable
+Buyers scan visually (grid); sellers/admins scan data (list/table): Grid for browsing, list for managing
+Verified badge, ratings, member-since all visible before the buyer commits to messaging: Trust signals surfaced early, not buried
+Filters, rental requests, claim forms — keeps context without full page navigation: Bottom sheets for secondary actions
+Create Listing, Roommate Preference — reduces perceived effort: Multi-step forms for anything with 4+ fields
+Sold/Active/Pending badges use consistent colors across every screen so users learn the system once: Color-coded status everywhere
+Never just "nothing here" — always paired with a CTA to fix it: Empty states always have a next action
+
+Campus Exchange — Product & UX Plan

@@ -6,8 +6,8 @@
 {% block content %}
 <style>
     .profile-card {
-        background-color: var(--surface-color);
-        border: 1px solid var(--border-color);
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-subtle);
         border-radius: 12px;
         padding: 2.5rem;
         max-width: 720px;
@@ -19,7 +19,7 @@
         align-items: center;
         gap: 1.5rem;
         padding-bottom: 2rem;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-subtle);
         margin-bottom: 2rem;
     }
 
@@ -28,7 +28,7 @@
         height: 80px;
         border-radius: 50%;
         object-fit: cover;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-subtle);
     }
 
     .profile-avatar-placeholder-large {
@@ -36,7 +36,7 @@
         height: 80px;
         border-radius: 50%;
         background-color: rgba(255, 255, 255, 0.08);
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-subtle);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -59,9 +59,9 @@
     }
 
     .badge-status-pending {
-        background-color: rgba(245, 158, 11, 0.08);
-        border: 1px solid #F59E0B;
-        color: #FBBF24;
+        background-color: var(--accent-muted);
+        border: 1px solid var(--accent);
+        color: var(--accent);
         font-size: 0.75rem;
         font-weight: 500;
         padding: 0.1875rem 0.5rem;

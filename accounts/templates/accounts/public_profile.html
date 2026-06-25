@@ -1,0 +1,449 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ other_user.username }}'s Profile - CampusEx{% endblock %}
+
+{% block content %}
+<style>
+    .public-profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .profile-info-card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: 16px;
+        padding: 2.5rem;
+        text-align: center;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .avatar-circle-large {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 2rem;
+        margin: 0 auto;
+    }
+
+    .profile-info-card img.rounded-circle {
+        border: 2px solid var(--accent);
+        object-fit: cover;
+    }
+
+    .verified-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        background-color: rgba(108, 99, 255, 0.1);
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.625rem;
+        border-radius: 99px;
+        border: 1px solid rgba(108, 99, 255, 0.15);
+    }
+
+    .stats-row {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        border-top: 1px solid var(--border-subtle);
+        border-bottom: 1px solid var(--border-subtle);
+        padding: 1.25rem 0;
+    }
+
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stat-value {
+        color: var(--text-primary);
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.25rem;
+    }
+
+    /* Tabs */
+    .profile-tabs {
+        display: flex;
+        border-bottom: 1px solid var(--border-subtle);
+        gap: 1.5rem;
+    }
+
+    .tab-item {
+        color: var(--text-secondary);
+        padding-bottom: 0.75rem;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        position: relative;
+    }
+
+    .tab-item.active {
+        color: var(--accent);
+    }
+
+    .tab-item.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: var(--accent);
+    }
+
+    /* Listings grid (2 cols desktop, 1 col mobile) */
+    .listings-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    @media (max-width: 576px) {
+        .listings-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+    }
+
+    .listing-card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: border-color 0.2s ease;
+    }
+
+    .listing-card:hover {
+        border-color: rgba(108, 99, 255, 0.25);
+    }
+
+    .listing-image-container {
+        position: relative;
+        height: 180px;
+        background-color: var(--bg-input);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .listing-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .badge-category-top-left {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: var(--text-primary);
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-weight: 500;
+    }
+
+    .badge-deal-type-top-right {
+        position: absolute;
+        top: 10px;
+        right: 48px;
+        background-color: var(--accent);
+        color: #ffffff;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+
+    .wishlist-heart-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(18, 18, 24, 0.6);
+        border: 1px solid var(--border-subtle);
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        transition: transform 0.2s ease, background 0.2s ease;
+        padding: 0;
+        color: var(--text-secondary);
+    }
+
+    .wishlist-heart-btn:hover {
+        transform: scale(1.1);
+        background: rgba(18, 18, 24, 0.8);
+        color: var(--text-primary);
+    }
+
+    .wishlist-heart-btn.saved {
+        color: var(--accent);
+        border-color: rgba(108, 99, 255, 0.3);
+    }
+
+    .wishlist-heart-btn svg {
+        transition: fill 0.2s ease, stroke 0.2s ease;
+    }
+
+    .wishlist-heart-btn.saved svg {
+        fill: var(--accent) !important;
+        stroke: var(--accent) !important;
+    }
+
+    .listing-card-body {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .card-title-link {
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 0.9375rem;
+        text-decoration: none !important;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .card-title-link:hover {
+        color: var(--accent);
+    }
+
+    .card-price-serif {
+        font-family: 'Lora', Georgia, serif;
+        color: var(--accent);
+        font-weight: 500;
+        font-size: 1.0625rem;
+    }
+
+    .card-location-muted {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    /* Fallback image gradients */
+    .grad-books { background: linear-gradient(135deg, #1E1A3A, #2E1A47); color: #8F85FF; }
+    .grad-electronics { background: linear-gradient(135deg, #1A2E3A, #1A3E47); color: #3CD070; }
+    .grad-cycles { background: linear-gradient(135deg, #3A2E1A, #473A1A); color: #F2C84B; }
+    .grad-hostel { background: linear-gradient(135deg, #2D1A3A, #3D1A3E); color: #E070FF; }
+    .grad-fashion { background: linear-gradient(135deg, #1A3A2E, #1A473E); color: #3CD0A5; }
+    .grad-default { background: linear-gradient(135deg, #252535, #2D2D42); color: #A0A0B8; }
+</style>
+
+<div class="public-profile-container">
+    <!-- Profile Info Card -->
+    <div class="profile-info-card mb-5">
+        {% if other_user.profile.profile_picture %}
+            <img src="{{ other_user.profile.profile_picture.url }}" class="rounded-circle border mb-3" width="80" height="80" alt="{{ other_user.username }}">
+        {% else %}
+            <div class="avatar-circle-large mb-3">
+                {{ other_user.username|slice:":1"|upper }}
+            </div>
+        {% endif %}
+
+        <h2 class="h2-title mb-1">{{ other_user.username }}</h2>
+        
+        <p class="text-secondary meta-text mb-2">
+            {% if other_user.profile.branch %}
+                {{ other_user.profile.branch }} {% if other_user.profile.year %}(Year {{ other_user.profile.year }}){% endif %}
+            {% else %}
+                Student Member
+            {% endif %}
+        </p>
+
+        {% if show_verified %}
+            <div class="mb-3">
+                <div class="verified-badge">
+                    <i data-lucide="verified" style="width: 0.875rem; height: 0.875rem;"></i>
+                    <span>Verified Student</span>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if other_user.profile.bio %}
+            <p class="body-text text-secondary mb-4" style="max-width: 500px; margin: 0 auto 1.5rem auto;">
+                "{{ other_user.profile.bio }}"
+            </p>
+        {% endif %}
+
+        <!-- Stats Row -->
+        <div class="stats-row mb-4">
+            <div class="stat-item">
+                <span class="stat-value">{{ active_listings_count }}</span>
+                <span class="stat-label">Active Listings</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ other_user.date_joined|date:"M Y" }}</span>
+                <span class="stat-label">Member since</span>
+            </div>
+        </div>
+
+        <!-- Contact Button -->
+        {% if request.user.is_authenticated %}
+            {% if request.user != other_user %}
+                <div class="d-flex justify-content-center">
+                    <a href="{% url 'messaging:start_user_conversation' other_user.pk %}" class="btn btn-custom px-4 py-2">
+                        <i data-lucide="message-square" style="width: 1.125rem; height: 1.125rem; margin-right: 0.25rem;"></i>
+                        <span>Message {{ other_user.username }}</span>
+                    </a>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="d-flex justify-content-center">
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-custom px-4 py-2">
+                    <i data-lucide="lock" style="width: 1.125rem; height: 1.125rem; margin-right: 0.25rem;"></i>
+                    <span>Login to Message</span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Active Listings Section -->
+    <div class="profile-tabs mb-4">
+        <span class="tab-item active">Listings ({{ active_listings_count }})</span>
+    </div>
+
+    {% if active_listings %}
+        <div class="listings-grid">
+            {% for listing in active_listings %}
+                <div class="listing-card">
+                    <div class="listing-image-container">
+                        {% with primary_image=listing.images.first %}
+                            {% if primary_image %}
+                                <img src="{{ primary_image.image.url }}" class="listing-img" alt="{{ listing.title }}">
+                            {% else %}
+                                <div class="w-100 h-100 d-flex align-items-center justify-content-center {% if listing.category.slug == 'books' %}grad-books{% elif listing.category.slug == 'electronics' %}grad-electronics{% elif listing.category.slug == 'cycles' %}grad-cycles{% elif listing.category.slug == 'hostel-essentials' %}grad-hostel{% elif listing.category.slug == 'fashion' %}grad-fashion{% elif listing.category.slug == 'stationery' %}grad-stationery{% else %}grad-default{% endif %}">
+                                    {% if listing.category.slug == 'books' %}
+                                        <i data-lucide="book" style="width: 2rem; height: 2rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'electronics' %}
+                                        <i data-lucide="laptop" style="width: 2rem; height: 2rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'cycles' %}
+                                        <i data-lucide="bike" style="width: 2rem; height: 2rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'hostel-essentials' %}
+                                        <i data-lucide="home" style="width: 2rem; height: 2rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'fashion' %}
+                                        <i data-lucide="shirt" style="width: 2rem; height: 2rem; stroke-width: 1.5;"></i>
+                                    {% else %}
+                                        <i data-lucide="pen-tool" style="width: 2rem; height: 2rem; stroke-width: 1.5;"></i>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                        {% if listing.category %}
+                            <span class="badge-category-top-left">{{ listing.category.name }}</span>
+                        {% endif %}
+                        <span class="badge-deal-type-top-right">{{ listing.get_listing_type_display }}</span>
+                        
+                        <button class="wishlist-heart-btn {% if listing.pk in wishlisted_ids %}saved{% endif %}" 
+                                data-listing-id="{{ listing.pk }}" 
+                                data-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+                                onclick="event.preventDefault(); toggleWishlist(this, {{ listing.pk }});"
+                                title="Add to Wishlist">
+                            <i data-lucide="heart" style="width: 1rem; height: 1rem; {% if listing.pk in wishlisted_ids %}fill: var(--accent); stroke: var(--accent);{% endif %}"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="listing-card-body">
+                        <a href="{% url 'listings:detail' listing.pk %}" class="card-title-link text-truncate" title="{{ listing.title }}">
+                            {{ listing.title }}
+                        </a>
+                        <div class="d-flex justify-content-between align-items-baseline mt-auto pt-2">
+                            <span class="card-price-serif">
+                                {% if listing.price == 0 %}
+                                    {% if listing.listing_type == 'free' %}Free{% else %}Exchange{% endif %}
+                                {% else %}
+                                    ₹{{ listing.price|floatformat:0 }}
+                                {% endif %}
+                            </span>
+                            <span class="card-location-muted">
+                                {{ listing.hostel_location|default:"Campus" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i data-lucide="package-open" style="color: var(--text-muted); width: 3rem; height: 3rem; margin-bottom: 1rem;"></i>
+            <h5 class="h6-title text-secondary">No active listings by this student.</h5>
+        </div>
+    {% endif %}
+</div>
+
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+<script>
+function toggleWishlist(button, listingId) {
+    if (button.getAttribute('data-logged-in') === 'false') {
+        window.location.href = "{% url 'login' %}?next=" + window.location.pathname;
+        return;
+    }
+    
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    fetch(`/listing/${listingId}/wishlist/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (response.status === 403 || response.status === 401) {
+            window.location.href = "{% url 'login' %}?next=" + window.location.pathname;
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.wishlisted !== undefined) {
+            const heartIcon = button.querySelector('svg') || button.querySelector('i');
+            if (data.wishlisted) {
+                button.classList.add('saved');
+                if (heartIcon) {
+                    heartIcon.style.fill = 'var(--accent)';
+                    heartIcon.style.stroke = 'var(--accent)';
+                }
+            } else {
+                button.classList.remove('saved');
+                if (heartIcon) {
+                    heartIcon.style.fill = 'none';
+                    heartIcon.style.stroke = 'currentColor';
+                }
+            }
+        }
+    })
+    .catch(err => console.error(err));
+}
+</script>
+{% endblock %}

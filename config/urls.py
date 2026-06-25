@@ -19,9 +19,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from accounts import views as accounts_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
+    path('profile/<str:username>/', accounts_views.public_profile, name='public_profile'),
+    path('', include('messaging.urls')),
+    path('', include('notifications.urls')),
     path('', include('listings.urls')),
 ]
 
