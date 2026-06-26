@@ -744,7 +744,22 @@
                     <div class="card-image-area">
                         {% with primary_image=listing.images.first %}
                             {% if primary_image %}
-                                <img src="{{ primary_image.image.url }}" class="card-img-new" alt="{{ listing.title }}">
+                                <img src="{{ primary_image.image.url }}" class="card-img-new" alt="{{ listing.title }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="placeholder-grad-new" style="display: none;">
+                                    {% if listing.category.slug == 'books' %}
+                                        <i data-lucide="book" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'electronics' %}
+                                        <i data-lucide="laptop" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'cycles' %}
+                                        <i data-lucide="bike" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'hostel-essentials' %}
+                                        <i data-lucide="home" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'fashion' %}
+                                        <i data-lucide="shirt" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% else %}
+                                        <i data-lucide="pen-tool" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% endif %}
+                                </div>
                             {% else %}
                                 <div class="placeholder-grad-new">
                                     {% if listing.category.slug == 'books' %}
@@ -819,7 +834,22 @@
                     <div class="card-image-area">
                         {% with primary_image=listing.images.first %}
                             {% if primary_image %}
-                                <img src="{{ primary_image.image.url }}" class="card-img-new" alt="{{ listing.title }}">
+                                <img src="{{ primary_image.image.url }}" class="card-img-new" alt="{{ listing.title }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="placeholder-grad-new" style="display: none;">
+                                    {% if listing.category.slug == 'books' %}
+                                        <i data-lucide="book" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'electronics' %}
+                                        <i data-lucide="laptop" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'cycles' %}
+                                        <i data-lucide="bike" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'hostel-essentials' %}
+                                        <i data-lucide="home" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'fashion' %}
+                                        <i data-lucide="shirt" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% else %}
+                                        <i data-lucide="pen-tool" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% endif %}
+                                </div>
                             {% else %}
                                 <div class="placeholder-grad-new">
                                     {% if listing.category.slug == 'books' %}
