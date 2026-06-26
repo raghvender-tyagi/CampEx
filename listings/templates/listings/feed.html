@@ -4,602 +4,916 @@
 
 {% block content %}
 <style>
-    /* Search Bar Merged Styling */
-    .search-container {
-        width: 100%;
-        max-width: 100%;
-    }
-    
-    .search-group {
-        display: flex;
-        align-items: center;
-        background-color: var(--bg-input);
-        border: 1px solid var(--border-input);
-        border-radius: 8px;
-        padding: 0.25rem;
-        transition: border-color 0.15s ease;
-    }
-    
-    .search-group:focus-within {
-        border-color: var(--accent);
-    }
-    
-    .search-icon-addon {
-        color: var(--text-secondary);
-        padding-left: 0.75rem;
-        display: flex;
-        align-items: center;
-    }
-    
-    .search-input {
-        border: none !important;
-        background-color: transparent !important;
-        color: var(--text-primary) !important;
-        flex-grow: 1;
-        font-size: 0.875rem;
-        padding: 0.5rem 0.75rem;
-    }
-    
-    .search-input:focus {
-        box-shadow: none !important;
-        outline: none !important;
-    }
-    
-    .search-btn {
-        background-color: var(--accent);
-        border: none;
-        color: var(--text-on-accent);
-        font-size: 0.875rem;
-        font-weight: 600;
-        padding: 0.5rem 1.25rem;
-        border-radius: 6px;
-        transition: background-color 0.15s ease;
-    }
-    
-    .search-btn:hover {
-        background-color: var(--accent-hover);
-    }
-
-    /* Category Square Scroller */
-    .category-scroll-container {
-        display: flex;
-        gap: 1rem;
-        overflow-x: auto;
-        padding: 0.5rem 0;
-        scrollbar-width: none; /* Firefox */
-    }
-    .category-scroll-container::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, Opera */
-    }
-    .category-square-item {
+    /* 2. HERO SECTION styling */
+    .hero-section-new {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.5rem;
-        text-decoration: none !important;
-        color: var(--text-secondary);
-        min-width: 90px;
-        transition: color 0.15s ease;
-    }
-    .category-square-item:hover, .category-square-item.active {
-        color: var(--text-primary);
-    }
-    .category-square-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 13px; /* As specified in prompt */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.15s ease, border-color 0.15s ease;
-        border: 1px solid var(--border-subtle);
-        background-color: var(--bg-card);
-        color: var(--text-secondary);
-    }
-    .category-square-item:hover .category-square-icon {
-        transform: translateY(-2px);
-        border-color: var(--text-secondary);
-    }
-    .category-square-item.active .category-square-icon {
-        background-color: var(--accent-muted) !important;
-        color: var(--accent) !important;
-        border-color: var(--accent) !important;
-        box-shadow: 0 0 0 2px var(--accent-muted);
-    }
-    .category-square-label {
-        font-size: 0.75rem;
-        font-weight: 500;
         text-align: center;
-        white-space: nowrap;
-        color: var(--text-muted);
-    }
-    .category-square-item.active .category-square-label {
-        color: var(--accent);
+        max-width: 680px;
+        margin: 40px auto 48px auto;
+        padding: 0 16px;
     }
 
-    /* Category Icon Color Tints (Custom Tones mapped to keep system neutral & clean) */
-    .cat-all, .cat-books, .cat-electronics, .cat-cycles, .cat-hostel, .cat-fashion, .cat-stationery {
-        background-color: var(--bg-card) !important;
-        color: var(--text-secondary) !important;
-    }
-
-    /* Category Gradient Placeholders for items with no image */
-    .grad-books, .grad-electronics, .grad-cycles, .grad-hostel, .grad-fashion, .grad-stationery {
-        background: linear-gradient(135deg, rgba(108, 99, 255, 0.05), rgba(108, 99, 255, 0.2)) !important;
-        color: var(--accent) !important;
-    }
-    .grad-default {
-        background: linear-gradient(135deg, rgba(158, 154, 166, 0.05), rgba(107, 114, 128, 0.2));
-        color: var(--text-secondary);
-    }
-
-    /* Deal Type Filter Pills */
-    .filter-pill {
-        background-color: transparent;
-        border: 1px solid var(--border-subtle);
-        color: var(--text-secondary);
-        font-size: 0.8125rem;
-        font-weight: 500;
-        padding: 0.375rem 1rem;
-        border-radius: 9999px;
-        text-decoration: none;
-        transition: all 0.15s ease;
-    }
-
-    .filter-pill:hover {
-        color: var(--accent);
-        border-color: var(--accent);
-    }
-
-    .filter-pill.active {
-        background-color: var(--accent);
-        border-color: var(--accent);
-        color: var(--text-on-accent);
+    .college-badge-new {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid rgba(108, 99, 255, 0.4);
+        background: rgba(108, 99, 255, 0.1);
+        color: #a09cff;
+        font-size: 11px;
         font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 6px 14px;
+        border-radius: 999px;
+        margin-bottom: 20px;
     }
 
-    /* Listing Card Refined */
-    .listing-card {
-        background-color: var(--bg-card);
-        border: 1px solid var(--border-subtle);
-        border-radius: 12px;
-        overflow: hidden;
-        transition: transform 0.15s ease, border-color 0.15s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+    .hero-headline-new {
+        font-size: clamp(2rem, 5vw, 3.25rem);
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 1.15;
+        margin: 0;
     }
 
-    .listing-card:hover {
-        transform: translateY(-2px);
-        background-color: var(--bg-card-hover);
-        border-color: rgba(108, 99, 255, 0.25); /* 25% opacity accent border */
+    .hero-tagline-new {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.55);
+        margin-top: 10px;
+        margin-bottom: 0;
     }
 
-    .listing-image-container {
+    .search-wrapper-new {
         position: relative;
         width: 100%;
-        aspect-ratio: 4/3;
-        background-color: var(--bg-input);
-        overflow: hidden;
+        margin-top: 28px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-input-new {
+        width: 100%;
+        height: 52px;
+        background: rgba(255, 255, 255, 0.07) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 12px !important;
+        padding-left: 44px !important;
+        padding-right: 120px !important;
+        color: #ffffff !important;
+        font-size: 0.9375rem;
+        transition: all 150ms ease;
+    }
+
+    .search-input-new::placeholder {
+        color: rgba(255, 255, 255, 0.35);
+    }
+
+    .search-input-new:focus {
+        border-color: #6C63FF !important;
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2) !important;
+        outline: none;
+    }
+
+    .search-icon-new {
+        position: absolute;
+        left: 16px;
+        color: rgba(255, 255, 255, 0.35);
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    .search-button-new {
+        position: absolute;
+        right: 8px;
+        background: #6C63FF;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        height: 36px;
+        padding: 0 18px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        transition: background-color 150ms ease;
+        z-index: 5;
+    }
+
+    .search-button-new:hover {
+        background: #5b52e6;
+    }
+
+    /* 3. CATEGORY BROWSER & 4. STICKY FILTER BAR styling */
+    .sticky-filter-bar {
+        position: sticky;
+        top: 56px;
+        z-index: 1000;
+        background: rgba(13, 13, 26, 0.92);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        padding: 12px 0;
+        margin-bottom: 0;
+    }
+
+    .category-scroll-container-new {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    @media (max-width: 992px) {
+        .category-scroll-container-new {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            gap: 12px;
+            padding-bottom: 8px;
+        }
+        .category-scroll-container-new::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .category-square-item-new {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none !important;
+        min-width: 72px;
+    }
+
+    .category-icon-area {
+        width: 72px;
+        height: 72px;
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: all 150ms ease;
     }
 
-    .listing-img {
+    /* Inactive Category State */
+    .category-square-item-new .category-icon-area {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        color: #ffffff;
+    }
+    .category-square-item-new .category-icon-area svg {
+        opacity: 0.5;
+        transition: opacity 150ms ease;
+    }
+    .category-square-label-new {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 12px;
+        text-align: center;
+        transition: color 150ms ease;
+    }
+
+    /* Hover Inactive */
+    .category-square-item-new:not(.active):hover .category-icon-area {
+        background: rgba(255, 255, 255, 0.09);
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+    .category-square-item-new:not(.active):hover .category-icon-area svg {
+        opacity: 0.75;
+    }
+    .category-square-item-new:not(.active):hover .category-square-label-new {
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    /* Active Category State */
+    .category-square-item-new.active .category-icon-area {
+        background: rgba(108, 99, 255, 0.18);
+        border: 1px solid rgba(108, 99, 255, 0.5);
+        border-radius: 14px;
+        color: #a09cff;
+    }
+    .category-square-item-new.active .category-icon-area svg {
+        opacity: 1;
+    }
+    .category-square-item-new.active .category-square-label-new {
+        color: #a09cff;
+        font-weight: 600;
+    }
+
+    /* Deal Type Pills and Row */
+    .deal-type-row-new {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 12px;
+    }
+
+    .deal-type-pills-new {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .filter-pill-new {
+        height: 32px;
+        border-radius: 999px;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 16px;
+        text-decoration: none !important;
+        transition: all 150ms ease;
+    }
+
+    .filter-pill-new {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .filter-pill-new:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+    }
+
+    .filter-pill-new.active {
+        background: #6C63FF;
+        border: 1px solid #6C63FF;
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    .results-count-new {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* 5. LISTING CARD GRID styling */
+    .listings-grid-new {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 16px;
+    }
+
+    .card-new {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+        text-decoration: none !important;
+    }
+
+    .card-new:hover {
+        transform: translateY(-3px);
+        border-color: rgba(108, 99, 255, 0.4);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-image-area {
+        position: relative;
+        height: 180px;
+        width: 100%;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    .card-img-new {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: transform 200ms ease;
     }
 
-    .badge-category-top-left {
+    .card-new:hover .card-img-new {
+        transform: scale(1.03);
+    }
+
+    /* Deal type badges on image */
+    .deal-badge-new {
         position: absolute;
         top: 10px;
         left: 10px;
-        background-color: #252535 !important;
-        color: var(--text-secondary) !important;
-        font-size: 11px;
-        font-weight: 500;
-        padding: 3px 8px;
-        border-radius: 4px;
-        backdrop-filter: blur(4px);
-        border: 1px solid var(--border-subtle) !important;
-    }
-
-    .badge-deal-type-top-right {
-        position: absolute;
-        top: 10px;
-        right: 48px;
-        background-color: var(--accent-muted) !important;
-        color: var(--accent) !important;
         font-size: 11px;
         font-weight: 600;
         padding: 3px 8px;
-        border-radius: 4px;
+        border-radius: 6px;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        z-index: 5;
     }
 
-    .wishlist-heart-btn {
+    .deal-badge-new.sell {
+        background: #6C63FF;
+        color: #ffffff;
+    }
+
+    .deal-badge-new.rent {
+        background: #1D9E75;
+        color: #ffffff;
+    }
+
+    .deal-badge-new.exchange {
+        background: #EF9F27;
+        color: #411800;
+    }
+
+    .deal-badge-new.free {
+        background: #639922;
+        color: #ffffff;
+    }
+
+    /* Heart button */
+    .heart-btn-new {
         position: absolute;
         top: 10px;
         right: 10px;
-        background: rgba(18, 18, 24, 0.6);
-        border: 1px solid var(--border-subtle);
+        width: 32px;
+        height: 32px;
+        background: rgba(0, 0, 0, 0.4);
         border-radius: 50%;
-        width: 28px;
-        height: 28px;
+        border: none;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
         display: flex;
         align-items: center;
         justify-content: center;
+        color: rgba(255, 255, 255, 0.7);
         cursor: pointer;
         z-index: 10;
-        transition: transform 0.2s ease, background 0.2s ease;
+        transition: all 150ms ease;
         padding: 0;
-        color: var(--text-secondary);
     }
 
-    .wishlist-heart-btn:hover {
-        transform: scale(1.1);
-        background: rgba(18, 18, 24, 0.8);
-        color: var(--text-primary);
+    .heart-btn-new:hover {
+        background: rgba(0, 0, 0, 0.6);
+        color: #ffffff;
     }
 
-    .wishlist-heart-btn.saved {
-        color: var(--accent);
-        border-color: rgba(108, 99, 255, 0.3);
+    .heart-btn-new.saved {
+        color: #ff3b30;
     }
 
-    .wishlist-heart-btn svg {
-        transition: fill 0.2s ease, stroke 0.2s ease;
+    .heart-btn-new.saved svg {
+        fill: #ff3b30 !important;
+        stroke: #ff3b30 !important;
+        animation: pulse-heart 0.3s ease-in-out;
     }
 
-    .wishlist-heart-btn.saved svg {
-        fill: var(--accent) !important;
-        stroke: var(--accent) !important;
+    @keyframes pulse-heart {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1); }
     }
 
-    .listing-card-body {
-        padding: 12px;
+    /* Card Body */
+    .card-body-new {
+        padding: 12px 14px;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
     }
 
-    .card-title-link {
-        color: var(--text-primary);
-        text-decoration: none !important;
-        font-size: 0.9375rem;
+    .card-category-chip-new {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 4px;
+        text-transform: uppercase;
         font-weight: 500;
-        display: block;
+        letter-spacing: 0.05em;
+    }
+
+    .card-title-new {
+        font-size: 15px;
+        font-weight: 600;
+        color: #ffffff;
+        line-height: 1.3;
+        margin-bottom: 8px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 39px;
+    }
+
+    .card-price-new {
+        font-size: 17px;
+        font-weight: 700;
+        color: #6C63FF;
+        margin-top: auto;
         margin-bottom: 8px;
     }
 
-    .card-title-link:hover {
-        color: var(--accent);
+    .card-price-new.free {
+        color: #1D9E75;
     }
 
-    .card-price-serif {
-        font-family: 'Lora', Georgia, serif;
-        font-weight: 700;
-        font-size: 1.125rem;
-        color: var(--accent);
-    }
-
-    .card-location-muted {
-        font-size: 0.75rem;
-        color: var(--text-muted);
-    }
-
-    /* Grid & Layout rhythms */
-    .hero-section {
+    .card-footer-new {
         display: flex;
-        flex-direction: column;
-        gap: 24px;
-        padding-top: 8px; /* 56px container margin + 8px = 64px from navbar */
-        padding-bottom: 0;
-        margin-top: 0;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        padding-top: 8px;
+        margin-top: 4px;
+    }
+
+    .card-seller-new {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 60%;
+    }
+
+    .card-location-new {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 40%;
+        text-align: right;
+    }
+
+    /* Category Image Placeholder Tints (Neutral gradients) */
+    .placeholder-grad-new {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(108, 99, 255, 0.05), rgba(108, 99, 255, 0.15));
+        color: #a09cff;
+    }
+
+    /* 6. SECTION SPACING & TYPOGRAPHY RHYTHM styling */
+    .section-wrapper-new {
         margin-bottom: 48px;
     }
-    
-    @media (min-width: 768px) {
-        .hero-section {
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            gap: 40px;
+
+    .section-wrapper-new:first-of-type {
+        margin-top: 32px;
+    }
+
+    .section-heading-new {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 16px;
+    }
+
+    /* 7. SKELETON LOADING STATES styling */
+    @keyframes shimmer {
+        0% {
+            background-position: 200% 0;
         }
-        .hero-left {
-            width: 60%;
-        }
-        .hero-right {
-            width: 40%;
+        100% {
+            background-position: -200% 0;
         }
     }
 
-    .categories-section {
+    .shimmer-bg {
+        background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite linear;
+    }
+
+    .skeleton-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .skeleton-img {
+        height: 180px;
+        width: 100%;
+    }
+
+    .skeleton-body {
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex-grow: 1;
+    }
+
+    .skeleton-chip {
+        width: 60px;
+        height: 12px;
+        border-radius: 4px;
+    }
+
+    .skeleton-title {
+        width: 85%;
+        height: 16px;
+        border-radius: 4px;
+    }
+
+    .skeleton-title-sub {
+        width: 60%;
+        height: 16px;
+        border-radius: 4px;
+    }
+
+    .skeleton-price {
+        width: 40%;
+        height: 20px;
+        border-radius: 4px;
+        margin-top: 8px;
+    }
+
+    .skeleton-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        padding-top: 8px;
+        margin-top: 12px;
+    }
+
+    .skeleton-seller {
+        width: 50px;
+        height: 12px;
+        border-radius: 4px;
+    }
+
+    .skeleton-location {
+        width: 40px;
+        height: 12px;
+        border-radius: 4px;
+    }
+
+    /* 8. EMPTY STATE styling */
+    .empty-state-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 60px 24px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        max-width: 480px;
+        margin: 40px auto;
+    }
+
+    .empty-state-icon {
+        font-size: 48px;
         margin-bottom: 20px;
+        color: rgba(255, 255, 255, 0.35);
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .deal-type-section {
-        margin-bottom: 40px;
+    .empty-state-heading {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 8px;
     }
 
-    .section-header-margin {
-        margin-bottom: 20px;
+    .empty-state-subtext {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 24px;
+        max-width: 320px;
     }
 
-    .listings-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 20px;
+    .empty-state-btn {
+        background-color: #6C63FF;
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 0.625rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        transition: background-color 150ms ease;
     }
 
-    @media (max-width: 767px) {
-        .listings-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-    }
-
-    @media (max-width: 479px) {
-        .listings-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-        }
+    .empty-state-btn:hover {
+        background-color: #5b52e6;
     }
 </style>
 
 <!-- Hero Section -->
-<div class="hero-section">
-    <div class="hero-left">
-        <span class="eyebrow">KIET GHAZIABAD · VERIFIED STUDENTS ONLY</span>
-        <h1 class="h1-title" style="font-size: 2.5rem; line-height: 1.2; margin-bottom: 12px !important;">Campus Exchange</h1>
-        <p class="text-muted mb-0" style="font-size: 1.0625rem; max-width: 580px;">No more scrolling 40 unread WhatsApp messages to find a study table.</p>
+<div class="hero-section-new">
+    <div class="college-badge-new">
+        <span>✓</span> KIET GHAZIABAD
     </div>
+    <h1 class="hero-headline-new">Campus Exchange</h1>
+    <p class="hero-tagline-new">No more scrolling 40 unread WhatsApp messages to find a study table.</p>
     
-    <div class="hero-right">
-        <div class="search-container">
-            <form method="get" action="{% url 'listings:feed' %}">
-                {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
-                {% if selected_type %}<input type="hidden" name="type" value="{{ selected_type }}">{% endif %}
-                
-                <div class="search-group">
-                    <span class="search-icon-addon">
-                        <i data-lucide="search" style="width: 1.125rem; height: 1.125rem;"></i>
-                    </span>
-                    <input type="text" name="q" class="search-input" placeholder="Search by title, room or hostel..." value="{{ query|default:'' }}">
-                    <button type="submit" class="search-btn">Search</button>
+    <div class="search-wrapper-new">
+        <form method="get" action="{% url 'listings:feed' %}" class="w-100 position-relative d-flex align-items-center">
+            {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+            {% if selected_type %}<input type="hidden" name="type" value="{{ selected_type }}">{% endif %}
+            
+            <i data-lucide="search" class="search-icon-new" style="width: 1.25rem; height: 1.25rem;"></i>
+            <input type="text" name="q" class="search-input-new" placeholder="Search by title, room or hostel..." value="{{ query|default:'' }}">
+            <button type="submit" class="search-button-new">Search</button>
+        </form>
+    </div>
+</div>
+
+<!-- Sticky Filter Bar (Category Browser + Deal Type Pills) -->
+<div class="sticky-filter-bar">
+    <div class="app-container">
+        <!-- Categories Grid / Scroll -->
+        <div class="category-scroll-container-new">
+            <!-- All Items Tile -->
+            <a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_type %}type={{ selected_type }}{% endif %}" 
+               class="category-square-item-new {% if not selected_category %}active{% endif %}">
+                <div class="category-icon-area">
+                    <i data-lucide="grid" style="width: 1.5rem; height: 1.5rem;"></i>
                 </div>
-            </form>
+                <span class="category-square-label-new">All Items</span>
+            </a>
+            
+            <!-- Category Loop -->
+            {% for cat in categories %}
+                <a href="?category={{ cat.slug }}{% if query %}&q={{ query }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" 
+                   class="category-square-item-new {% if selected_category == cat.slug %}active{% endif %}">
+                    <div class="category-icon-area">
+                        {% if cat.slug == 'books' %}
+                            <i data-lucide="book" style="width: 1.5rem; height: 1.5rem;"></i>
+                        {% elif cat.slug == 'electronics' %}
+                            <i data-lucide="laptop" style="width: 1.5rem; height: 1.5rem;"></i>
+                        {% elif cat.slug == 'cycles' %}
+                            <i data-lucide="bike" style="width: 1.5rem; height: 1.5rem;"></i>
+                        {% elif cat.slug == 'hostel-essentials' %}
+                            <i data-lucide="home" style="width: 1.5rem; height: 1.5rem;"></i>
+                        {% elif cat.slug == 'fashion' %}
+                            <i data-lucide="shirt" style="width: 1.5rem; height: 1.5rem;"></i>
+                        {% else %}
+                            <i data-lucide="pen-tool" style="width: 1.5rem; height: 1.5rem;"></i>
+                        {% endif %}
+                    </div>
+                    <span class="category-square-label-new">{{ cat.name }}</span>
+                </a>
+            {% endfor %}
+        </div>
+
+        <!-- Deal Type Row & Results count -->
+        <div class="deal-type-row-new">
+            <div class="deal-type-pills-new">
+                <a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_category %}category={{ selected_category }}{% endif %}" 
+                   class="filter-pill-new {% if not selected_type %}active{% endif %}">
+                    <span>All</span>
+                </a>
+                <a href="?type=sell{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
+                   class="filter-pill-new {% if selected_type == 'sell' %}active{% endif %}">
+                    <span>Sale</span>
+                </a>
+                <a href="?type=rent{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
+                   class="filter-pill-new {% if selected_type == 'rent' %}active{% endif %}">
+                    <span>Rent</span>
+                </a>
+                <a href="?type=exchange{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
+                   class="filter-pill-new {% if selected_type == 'exchange' %}active{% endif %}">
+                    <span>Exchange</span>
+                </a>
+                <a href="?type=free{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
+                   class="filter-pill-new {% if selected_type == 'free' %}active{% endif %}">
+                    <span>Free</span>
+                </a>
+            </div>
+            
+            <div class="results-count-new d-flex align-items-center gap-3">
+                {% if query or selected_category or selected_type %}
+                    <a href="{% url 'listings:feed' %}" class="text-decoration-none d-flex align-items-center gap-1" style="color: #a09cff; font-size: 13px;">
+                        <i data-lucide="rotate-ccw" style="width: 0.85rem; height: 0.85rem;"></i>
+                        <span>Reset</span>
+                    </a>
+                {% endif %}
+                <span>{{ listings.count|default:0 }} listings</span>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Categories Section -->
-<div class="categories-section">
-    <div class="d-flex align-items-center justify-content-between" style="margin-bottom: 20px !important;">
-        <h2 class="h2-title fs-5 mb-0">Browse by category</h2>
-        {% if query or selected_category or selected_type %}
-            <a href="{% url 'listings:feed' %}" class="meta-text text-decoration-none d-flex align-items-center gap-1">
-                <i data-lucide="rotate-ccw" style="width: 0.75rem; height: 0.75rem;"></i>
-                <span>Reset filters</span>
-            </a>
-        {% endif %}
-    </div>
-    
-    <div class="category-scroll-container">
-        <!-- All Items -->
-        <a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_type %}type={{ selected_type }}{% endif %}" 
-           class="category-square-item {% if not selected_category %}active{% endif %}">
-            <div class="category-square-icon cat-all">
-                <i data-lucide="grid" style="width: 1.25rem; height: 1.25rem;"></i>
+<!-- Skeletons Loading Container (Visible on load, hidden by JS) -->
+<div id="skeletons-wrapper" class="listings-grid-new" style="margin-top: 32px; margin-bottom: 48px;">
+    {% for i in "12345678" %}
+    <div class="skeleton-card">
+        <div class="skeleton-img shimmer-bg"></div>
+        <div class="skeleton-body">
+            <div class="skeleton-chip shimmer-bg"></div>
+            <div class="skeleton-title shimmer-bg"></div>
+            <div class="skeleton-title-sub shimmer-bg"></div>
+            <div class="skeleton-price shimmer-bg"></div>
+            <div class="skeleton-footer">
+                <div class="skeleton-seller shimmer-bg"></div>
+                <div class="skeleton-location shimmer-bg"></div>
             </div>
-            <span class="category-square-label">All Items</span>
-        </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Actual Listings Content Container (Hidden on load, shown by JS) -->
+<div id="listings-content-wrapper" style="display: none;">
+    <!-- Near your hostel Section -->
+    {% if near_listings %}
+    <div class="section-wrapper-new">
+        <h2 class="section-heading-new d-flex align-items-center gap-2">
+            <i data-lucide="map-pin" style="width: 1.125rem; height: 1.125rem; color: #a09cff;"></i>
+            <span>Near your hostel (Hostel {{ user_hostel }})</span>
+        </h2>
         
-        {% for cat in categories %}
-            <a href="?category={{ cat.slug }}{% if query %}&q={{ query }}{% endif %}{% if selected_type %}&type={{ selected_type }}{% endif %}" 
-               class="category-square-item {% if selected_category == cat.slug %}active{% endif %}">
-                <div class="category-square-icon {% if cat.slug == 'books' %}cat-books{% elif cat.slug == 'electronics' %}cat-electronics{% elif cat.slug == 'cycles' %}cat-cycles{% elif cat.slug == 'hostel-essentials' %}cat-hostel{% elif cat.slug == 'fashion' %}cat-fashion{% else %}cat-stationery{% endif %}">
-                    {% if cat.slug == 'books' %}
-                        <i data-lucide="book" style="width: 1.25rem; height: 1.25rem;"></i>
-                    {% elif cat.slug == 'electronics' %}
-                        <i data-lucide="laptop" style="width: 1.25rem; height: 1.25rem;"></i>
-                    {% elif cat.slug == 'cycles' %}
-                        <i data-lucide="bike" style="width: 1.25rem; height: 1.25rem;"></i>
-                    {% elif cat.slug == 'hostel-essentials' %}
-                        <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
-                    {% elif cat.slug == 'fashion' %}
-                        <i data-lucide="shirt" style="width: 1.25rem; height: 1.25rem;"></i>
-                    {% else %}
-                        <i data-lucide="pen-tool" style="width: 1.25rem; height: 1.25rem;"></i>
-                    {% endif %}
-                </div>
-                <span class="category-square-label">{{ cat.name }}</span>
-            </a>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Deal Types Pill Selector -->
-<div class="deal-type-section d-flex align-items-center gap-3">
-    <span class="meta-text text-secondary">Deal Type:</span>
-    <div class="d-flex gap-2">
-        <a href="?{% if query %}q={{ query }}&{% endif %}{% if selected_category %}category={{ selected_category }}{% endif %}" 
-           class="filter-pill {% if not selected_type %}active{% endif %}">
-            <span>All</span>
-        </a>
-        <a href="?type=sell{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
-           class="filter-pill {% if selected_type == 'sell' %}active{% endif %}">
-            <span>Sale</span>
-        </a>
-        <a href="?type=rent{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
-           class="filter-pill {% if selected_type == 'rent' %}active{% endif %}">
-            <span>Rent</span>
-        </a>
-        <a href="?type=exchange{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
-           class="filter-pill {% if selected_type == 'exchange' %}active{% endif %}">
-            <span>Exchange</span>
-        </a>
-        <a href="?type=free{% if query %}&q={{ query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}" 
-           class="filter-pill {% if selected_type == 'free' %}active{% endif %}">
-            <span>Free</span>
-        </a>
-    </div>
-</div>
-
-<!-- Near your hostel Section -->
-{% if near_listings %}
-<div class="mb-5">
-    <h2 class="h2-title fs-5 mb-3 d-flex align-items-center gap-2">
-        <i data-lucide="map-pin" style="width: 1.125rem; height: 1.125rem; color: var(--accent-color);"></i>
-        <span>Near your hostel (Hostel {{ user_hostel }})</span>
-    </h2>
-    <div class="listings-grid">
-        {% for listing in near_listings %}
-            <div class="listing-card">
-                <div class="listing-image-container">
-                    {% with primary_image=listing.images.first %}
-                        {% if primary_image %}
-                            <img src="{{ primary_image.image.url }}" class="listing-img" alt="{{ listing.title }}">
-                        {% else %}
-                            <div class="w-100 h-100 d-flex align-items-center justify-content-center {% if listing.category.slug == 'books' %}grad-books{% elif listing.category.slug == 'electronics' %}grad-electronics{% elif listing.category.slug == 'cycles' %}grad-cycles{% elif listing.category.slug == 'hostel-essentials' %}grad-hostel{% elif listing.category.slug == 'fashion' %}grad-fashion{% elif listing.category.slug == 'stationery' %}grad-stationery{% else %}grad-default{% endif %}">
-                                {% if listing.category.slug == 'books' %}
-                                    <i data-lucide="book" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% elif listing.category.slug == 'electronics' %}
-                                    <i data-lucide="laptop" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% elif listing.category.slug == 'cycles' %}
-                                    <i data-lucide="bike" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% elif listing.category.slug == 'hostel-essentials' %}
-                                    <i data-lucide="home" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% elif listing.category.slug == 'fashion' %}
-                                    <i data-lucide="shirt" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% else %}
-                                    <i data-lucide="pen-tool" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    {% endwith %}
-                    {% if listing.category %}
-                        <span class="badge-category-top-left">{{ listing.category.name }}</span>
-                    {% endif %}
-                    <span class="badge-deal-type-top-right">{{ listing.get_listing_type_display }}</span>
+        <div class="listings-grid-new">
+            {% for listing in near_listings %}
+                <a href="{% url 'listings:detail' listing.pk %}" class="card-new">
+                    <div class="card-image-area">
+                        {% with primary_image=listing.images.first %}
+                            {% if primary_image %}
+                                <img src="{{ primary_image.image.url }}" class="card-img-new" alt="{{ listing.title }}">
+                            {% else %}
+                                <div class="placeholder-grad-new">
+                                    {% if listing.category.slug == 'books' %}
+                                        <i data-lucide="book" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'electronics' %}
+                                        <i data-lucide="laptop" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'cycles' %}
+                                        <i data-lucide="bike" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'hostel-essentials' %}
+                                        <i data-lucide="home" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'fashion' %}
+                                        <i data-lucide="shirt" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% else %}
+                                        <i data-lucide="pen-tool" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                        
+                        <!-- Deal Type Badge -->
+                        <span class="deal-badge-new {{ listing.listing_type }}">
+                            {{ listing.get_listing_type_display }}
+                        </span>
+                        
+                        <!-- Heart Wishlist button -->
+                        <button class="heart-btn-new {% if listing.pk in wishlisted_ids %}saved{% endif %}" 
+                                data-listing-id="{{ listing.pk }}" 
+                                data-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+                                onclick="event.preventDefault(); toggleWishlist(this, {{ listing.pk }});"
+                                title="Add to Wishlist">
+                            <i data-lucide="heart" style="width: 1rem; height: 1rem; {% if listing.pk in wishlisted_ids %}fill: #ff3b30; stroke: #ff3b30;{% endif %}"></i>
+                        </button>
+                    </div>
                     
-                    <button class="wishlist-heart-btn {% if listing.pk in wishlisted_ids %}saved{% endif %}" 
-                            data-listing-id="{{ listing.pk }}" 
-                            data-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
-                            onclick="event.preventDefault(); toggleWishlist(this, {{ listing.pk }});"
-                            title="Add to Wishlist">
-                        <i data-lucide="heart" style="width: 1rem; height: 1rem; {% if listing.pk in wishlisted_ids %}fill: var(--accent); stroke: var(--accent);{% endif %}"></i>
-                    </button>
-                </div>
-                
-                <div class="listing-card-body">
-                    <a href="{% url 'listings:detail' listing.pk %}" class="card-title-link text-truncate" title="{{ listing.title }}">
-                        {{ listing.title }}
-                    </a>
-                    <div class="d-flex justify-content-between align-items-baseline mt-auto pt-2">
-                        <span class="card-price-serif">
+                    <div class="card-body-new">
+                        {% if listing.category %}
+                            <span class="card-category-chip-new">{{ listing.category.name }}</span>
+                        {% endif %}
+                        <h3 class="card-title-new" title="{{ listing.title }}">
+                            {{ listing.title }}
+                        </h3>
+                        <div class="card-price-new {% if listing.listing_type == 'free' %}free{% endif %}">
                             {% if listing.price == 0 %}
-                                {% if listing.listing_type == 'free' %}Free{% else %}Exchange{% endif %}
+                                {% if listing.listing_type == 'free' %}FREE{% else %}Exchange{% endif %}
                             {% else %}
                                 ₹{{ listing.price|floatformat:0 }}
                             {% endif %}
-                        </span>
-                        <span class="card-location-muted">
-                            {{ listing.hostel_location|default:"Campus" }}
-                        </span>
+                        </div>
+                        
+                        <div class="card-footer-new">
+                            <span class="card-seller-new">
+                                {{ listing.seller.username }}
+                            </span>
+                            <span class="card-location-new">
+                                {{ listing.hostel_location|default:"Campus" }}
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </div>
-        {% endfor %}
+                </a>
+            {% endfor %}
+        </div>
     </div>
-</div>
-{% endif %}
+    {% endif %}
 
-<!-- Fresh on campus Section -->
-<div class="mb-5">
-    <h2 class="h2-title fs-5 section-header-margin">Fresh on campus</h2>
-    <div class="listings-grid">
-        {% for listing in listings %}
-            <div class="listing-card">
-                <div class="listing-image-container">
-                    {% with primary_image=listing.images.first %}
-                        {% if primary_image %}
-                            <img src="{{ primary_image.image.url }}" class="listing-img" alt="{{ listing.title }}">
-                        {% else %}
-                            <div class="w-100 h-100 d-flex align-items-center justify-content-center {% if listing.category.slug == 'books' %}grad-books{% elif listing.category.slug == 'electronics' %}grad-electronics{% elif listing.category.slug == 'cycles' %}grad-cycles{% elif listing.category.slug == 'hostel-essentials' %}grad-hostel{% elif listing.category.slug == 'fashion' %}grad-fashion{% elif listing.category.slug == 'stationery' %}grad-stationery{% else %}grad-default{% endif %}">
-                                {% if listing.category.slug == 'books' %}
-                                    <i data-lucide="book" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% elif listing.category.slug == 'electronics' %}
-                                    <i data-lucide="laptop" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% elif listing.category.slug == 'cycles' %}
-                                    <i data-lucide="bike" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% elif listing.category.slug == 'hostel-essentials' %}
-                                    <i data-lucide="home" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% elif listing.category.slug == 'fashion' %}
-                                    <i data-lucide="shirt" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% else %}
-                                    <i data-lucide="pen-tool" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    {% endwith %}
-                    {% if listing.category %}
-                        <span class="badge-category-top-left">{{ listing.category.name }}</span>
-                    {% endif %}
-                    <span class="badge-deal-type-top-right">{{ listing.get_listing_type_display }}</span>
+    <!-- Fresh on campus Section -->
+    <div class="section-wrapper-new">
+        <h2 class="section-heading-new">Fresh on campus</h2>
+        
+        <div class="listings-grid-new">
+            {% for listing in listings %}
+                <a href="{% url 'listings:detail' listing.pk %}" class="card-new">
+                    <div class="card-image-area">
+                        {% with primary_image=listing.images.first %}
+                            {% if primary_image %}
+                                <img src="{{ primary_image.image.url }}" class="card-img-new" alt="{{ listing.title }}">
+                            {% else %}
+                                <div class="placeholder-grad-new">
+                                    {% if listing.category.slug == 'books' %}
+                                        <i data-lucide="book" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'electronics' %}
+                                        <i data-lucide="laptop" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'cycles' %}
+                                        <i data-lucide="bike" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'hostel-essentials' %}
+                                        <i data-lucide="home" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% elif listing.category.slug == 'fashion' %}
+                                        <i data-lucide="shirt" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% else %}
+                                        <i data-lucide="pen-tool" style="width: 2.5rem; height: 2.5rem; stroke-width: 1.5;"></i>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                        
+                        <!-- Deal Type Badge -->
+                        <span class="deal-badge-new {{ listing.listing_type }}">
+                            {{ listing.get_listing_type_display }}
+                        </span>
+                        
+                        <!-- Heart Wishlist button -->
+                        <button class="heart-btn-new {% if listing.pk in wishlisted_ids %}saved{% endif %}" 
+                                data-listing-id="{{ listing.pk }}" 
+                                data-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+                                onclick="event.preventDefault(); toggleWishlist(this, {{ listing.pk }});"
+                                title="Add to Wishlist">
+                            <i data-lucide="heart" style="width: 1rem; height: 1rem; {% if listing.pk in wishlisted_ids %}fill: #ff3b30; stroke: #ff3b30;{% endif %}"></i>
+                        </button>
+                    </div>
                     
-                    <button class="wishlist-heart-btn {% if listing.pk in wishlisted_ids %}saved{% endif %}" 
-                            data-listing-id="{{ listing.pk }}" 
-                            data-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
-                            onclick="event.preventDefault(); toggleWishlist(this, {{ listing.pk }});"
-                            title="Add to Wishlist">
-                        <i data-lucide="heart" style="width: 1rem; height: 1rem; {% if listing.pk in wishlisted_ids %}fill: var(--accent); stroke: var(--accent);{% endif %}"></i>
-                    </button>
-                </div>
-                
-                <div class="listing-card-body">
-                    <a href="{% url 'listings:detail' listing.pk %}" class="card-title-link text-truncate" title="{{ listing.title }}">
-                        {{ listing.title }}
-                    </a>
-                    <div class="d-flex justify-content-between align-items-baseline mt-auto pt-2">
-                        <span class="card-price-serif">
+                    <div class="card-body-new">
+                        {% if listing.category %}
+                            <span class="card-category-chip-new">{{ listing.category.name }}</span>
+                        {% endif %}
+                        <h3 class="card-title-new" title="{{ listing.title }}">
+                            {{ listing.title }}
+                        </h3>
+                        <div class="card-price-new {% if listing.listing_type == 'free' %}free{% endif %}">
                             {% if listing.price == 0 %}
-                                {% if listing.listing_type == 'free' %}Free{% else %}Exchange{% endif %}
+                                {% if listing.listing_type == 'free' %}FREE{% else %}Exchange{% endif %}
                             {% else %}
                                 ₹{{ listing.price|floatformat:0 }}
                             {% endif %}
-                        </span>
-                        <span class="card-location-muted">
-                            {{ listing.hostel_location|default:"Campus" }}
-                        </span>
+                        </div>
+                        
+                        <div class="card-footer-new">
+                            <span class="card-seller-new">
+                                {{ listing.seller.username }}
+                            </span>
+                            <span class="card-location-new">
+                                {{ listing.hostel_location|default:"Campus" }}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            {% empty %}
+                <!-- 8. EMPTY STATE container -->
+                <div class="py-5 text-center w-100" style="grid-column: 1 / -1;">
+                    <div class="empty-state-container">
+                        <div class="empty-state-icon">
+                            <i data-lucide="package-open" style="width: 48px; height: 48px; stroke-width: 1.5; color: rgba(255,255,255,0.35);"></i>
+                        </div>
+                        <h3 class="empty-state-heading">Nothing listed yet</h3>
+                        <p class="empty-state-subtext">Be the first to list in this category</p>
+                        <a href="{% url 'listings:create' %}" class="empty-state-btn">
+                            <i data-lucide="plus" style="width: 1rem; height: 1rem;"></i>
+                            <span>+ List something</span>
+                        </a>
                     </div>
                 </div>
-            </div>
-        {% empty %}
-            <div class="py-5 text-center w-100" style="grid-column: 1 / -1;">
-                <div class="card p-5 mx-auto text-center" style="max-width: 480px; border-color: var(--border-color); background-color: var(--surface-color);">
-                    <div class="mb-3 text-muted">
-                        <i data-lucide="package-open" style="width: 3rem; height: 3rem; stroke-width: 1.25; color: var(--accent-color);"></i>
-                    </div>
-                    <h3 class="h2-title fs-5 mb-2 text-white">No listings here yet</h3>
-                    <p class="text-muted body-text mb-4" style="font-size: 0.875rem;">Be the first one to post a book, a cycle, or hostel essentials in this category.</p>
-                    <a href="{% url 'listings:create' %}" class="btn btn-custom mx-auto">
-                        <i data-lucide="plus" style="width: 1rem; height: 1rem;"></i>
-                        <span>Sell something</span>
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 </div>
 
 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
 <script>
+// Toggle skeleton loading transition
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const skeletons = document.getElementById('skeletons-wrapper');
+        const content = document.getElementById('listings-content-wrapper');
+        if (skeletons && content) {
+            skeletons.style.display = 'none';
+            content.style.display = 'block';
+        }
+    }, 450);
+});
+
 function toggleWishlist(button, listingId) {
     if (button.getAttribute('data-logged-in') === 'false') {
         window.location.href = "{% url 'login' %}?next=" + window.location.pathname;
@@ -628,8 +942,8 @@ function toggleWishlist(button, listingId) {
             if (data.wishlisted) {
                 button.classList.add('saved');
                 if (heartIcon) {
-                    heartIcon.style.fill = 'var(--accent)';
-                    heartIcon.style.stroke = 'var(--accent)';
+                    heartIcon.style.fill = '#ff3b30';
+                    heartIcon.style.stroke = '#ff3b30';
                 }
             } else {
                 button.classList.remove('saved');
