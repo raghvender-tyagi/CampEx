@@ -91,6 +91,10 @@ STORAGES = {
     },
 }
 
+# Legacy settings for django-cloudinary-storage compatibility in Django 5.1+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
