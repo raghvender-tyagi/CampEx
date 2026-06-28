@@ -11,8 +11,8 @@
     <style>
         :root {
             /* NeetCode.io inspired color tokens */
-            --bg-base: #101020;
-            --bg-nav: rgba(15, 15, 30, 0.95);
+            --bg-base: #0d0d1a;
+            --bg-nav: rgba(13, 13, 26, 0.8);
             --bg-card: rgba(255, 255, 255, 0.04);
             --bg-card-hover: rgba(255, 255, 255, 0.08);
             --bg-input: rgba(255, 255, 255, 0.07);
@@ -35,7 +35,7 @@
 
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-            background-color: var(--bg-base);
+            background: radial-gradient(ellipse at 50% 0%, #1a1040 0%, #0d0d1a 60%) fixed;
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
@@ -91,8 +91,8 @@
         .navbar {
             height: 56px;
             background: var(--bg-nav) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.07);
             padding: 0 !important;
             position: sticky;
@@ -136,8 +136,10 @@
         }
 
         .brand-text {
-            font-weight: 700;
-            color: var(--text-primary);
+            font-weight: 800;
+            background: linear-gradient(135deg, #a09cff 0%, #c3dafe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-size: 1.125rem;
             letter-spacing: -0.02em;
         }
@@ -172,11 +174,13 @@
             align-items: center;
             gap: 0.5rem;
             border: none;
-            transition: background-color 150ms ease;
+            box-shadow: 0 0 14px rgba(99, 102, 241, 0.5);
+            transition: transform 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
         }
 
         .btn-sell-something:hover {
             background-color: var(--accent-hover);
+            transform: scale(1.05);
         }
 
         .nav-zone-right {
@@ -198,7 +202,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
+            border-radius: 50%;
             color: rgba(255, 255, 255, 0.6);
             transition: all 150ms ease;
             background: transparent;
@@ -206,7 +210,7 @@
         }
 
         .nav-icon-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
             color: #ffffff;
         }
 

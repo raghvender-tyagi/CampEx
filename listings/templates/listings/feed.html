@@ -19,29 +19,41 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        border: 1px solid rgba(108, 99, 255, 0.4);
+        border: 1px solid rgba(99, 102, 241, 0.4);
         background: rgba(108, 99, 255, 0.1);
         color: #a09cff;
         font-size: 11px;
         font-weight: 600;
         letter-spacing: 0.1em;
         text-transform: uppercase;
-        padding: 6px 14px;
+        padding: 6px 16px;
         border-radius: 999px;
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
         margin-bottom: 20px;
     }
 
     .hero-headline-new {
-        font-size: clamp(2rem, 5vw, 3.25rem);
-        font-weight: 700;
+        font-size: clamp(2.5rem, 6vw, 3.75rem);
+        font-weight: 900;
+        letter-spacing: -0.03em;
         color: #ffffff;
         line-height: 1.15;
         margin: 0;
     }
 
+    .exchange-gradient-text {
+        background: linear-gradient(to right, #818cf8, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+    }
+
     .hero-tagline-new {
         font-size: 1rem;
-        color: rgba(255, 255, 255, 0.55);
+        color: #9ca3af;
+        max-width: 448px;
+        margin-left: auto;
+        margin-right: auto;
         margin-top: 10px;
         margin-bottom: 0;
     }
@@ -60,7 +72,7 @@
         height: 52px;
         background: rgba(255, 255, 255, 0.07) !important;
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-radius: 12px !important;
+        border-radius: 16px !important;
         padding-left: 44px !important;
         padding-right: 120px !important;
         color: #ffffff !important;
@@ -73,8 +85,8 @@
     }
 
     .search-input-new:focus {
-        border-color: #6C63FF !important;
-        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2) !important;
+        border-color: rgba(99, 102, 241, 0.5) !important;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3) !important;
         outline: none;
     }
 
@@ -89,7 +101,7 @@
     .search-button-new {
         position: absolute;
         right: 8px;
-        background: #6C63FF;
+        background: #4f46e5;
         color: #ffffff;
         border: none;
         border-radius: 8px;
@@ -102,7 +114,7 @@
     }
 
     .search-button-new:hover {
-        background: #5b52e6;
+        background: #6366f1;
     }
 
     .search-clear-btn {
@@ -142,8 +154,9 @@
 
     .category-scroll-container-new {
         display: grid;
-        grid-template-columns: repeat(8, 1fr);
-        gap: 16px;
+        grid-template-columns: repeat(8, auto);
+        justify-content: center;
+        gap: 16px 20px;
         margin-bottom: 16px;
     }
 
@@ -168,6 +181,7 @@
         gap: 8px;
         text-decoration: none !important;
         min-width: 72px;
+        margin: 0 4px;
     }
 
     .category-icon-area {
@@ -192,15 +206,16 @@
     }
     .category-square-label-new {
         color: rgba(255, 255, 255, 0.5);
-        font-size: 12px;
+        font-size: 11px;
+        letter-spacing: 0.05em;
         text-align: center;
         transition: color 150ms ease;
     }
 
     /* Hover Inactive */
     .category-square-item-new:not(.active):hover .category-icon-area {
-        background: rgba(255, 255, 255, 0.09);
-        border-color: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .category-square-item-new:not(.active):hover .category-icon-area svg {
         opacity: 0.75;
@@ -211,10 +226,11 @@
 
     /* Active Category State */
     .category-square-item-new.active .category-icon-area {
-        background: rgba(108, 99, 255, 0.18);
-        border: 1px solid rgba(108, 99, 255, 0.5);
+        background: rgba(79, 70, 229, 0.2);
+        border: 2px solid #6366f1;
         border-radius: 14px;
         color: #a09cff;
+        box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
     }
     .category-square-item-new.active .category-icon-area svg {
         opacity: 1;
@@ -240,32 +256,30 @@
 
     .filter-pill-new {
         height: 32px;
-        border-radius: 999px;
-        font-size: 13px;
+        border-radius: 9999px;
+        font-size: 14px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 0 16px;
+        padding: 6px 16px;
         text-decoration: none !important;
         transition: all 150ms ease;
-    }
-
-    .filter-pill-new {
         background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        color: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #9ca3af;
     }
 
     .filter-pill-new:hover {
-        border-color: rgba(255, 255, 255, 0.3);
+        border-color: #818cf8;
         color: #ffffff;
     }
 
     .filter-pill-new.active {
-        background: #6C63FF;
-        border: 1px solid #6C63FF;
+        background: #4f46e5;
+        border: 1px solid #4f46e5;
         color: #ffffff;
         font-weight: 600;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
     }
 
     .results-count-new {
@@ -488,8 +502,11 @@
     .section-heading-new {
         font-size: 1.25rem;
         font-weight: 700;
+        letter-spacing: -0.025em;
         color: #ffffff;
         margin-bottom: 16px;
+        border-left: 4px solid #6366f1;
+        padding-left: 12px;
     }
 
     /* 7. SKELETON LOADING STATES styling */
@@ -640,7 +657,7 @@
     <div class="college-badge-new">
         <span>✓</span> KIET GHAZIABAD
     </div>
-    <h1 class="hero-headline-new">Campus Exchange</h1>
+    <h1 class="hero-headline-new">Campus <span class="exchange-gradient-text">Exchange</span></h1>
     <p class="hero-tagline-new">No more scrolling 40 unread WhatsApp messages to find a study table.</p>
     
     <div class="search-wrapper-new">
