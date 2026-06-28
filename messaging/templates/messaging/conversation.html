@@ -305,7 +305,7 @@
     <div class="chat-messages-area" id="chatMessagesArea">
         {% if thread %}
             {% for msg in thread %}
-                <div class="message-bubble-wrapper {% if msg.sender == request.user %}sent{% else %}received{% endif %}">
+                <div class="message-bubble-wrapper {% if msg.sender == request.user %}sent{% else %}received{% endif %}" data-message-id="{{ msg.id }}">
                     <div class="message-bubble">
                         {{ msg.body|linebreaksbr }}
                     </div>
@@ -345,39 +345,147 @@
 </div>
 
 <script>
-    // Auto-scroll to bottom of chat window
     const chatArea = document.getElementById('chatMessagesArea');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const conversationId = "{{ conversation.pk }}";
+    const currentUsername = "{{ request.user.username }}";
+    let lastMessageId = 0;
+
+    // Helper function to update the lastMessageId based on DOM elements
+    function updateLastMessageId() {
+        const messageWrappers = chatArea.querySelectorAll('.message-bubble-wrapper');
+        if (messageWrappers.length > 0) {
+            const lastWrapper = messageWrappers[messageWrappers.length - 1];
+            const msgId = parseInt(lastWrapper.getAttribute('data-message-id'));
+            if (!isNaN(msgId)) {
+                lastMessageId = msgId;
+            }
+        }
+    }
+
     function scrollToBottom() {
         chatArea.scrollTop = chatArea.scrollHeight;
     }
 
+    // Append a message to the chat container
+    function appendMessage(msg) {
+        // If message already exists in DOM, skip it
+        if (chatArea.querySelector(`[data-message-id="${msg.id}"]`)) {
+            return;
+        }
+
+        // If "Start conversation" placeholder is present, remove it
+        const placeholder = chatArea.querySelector('.flex-column.align-items-center');
+        if (placeholder) {
+            chatArea.innerHTML = '';
+        }
+
+        const isSent = msg.sender === currentUsername;
+        const bubbleWrapper = document.createElement('div');
+        bubbleWrapper.className = `message-bubble-wrapper ${isSent ? 'sent' : 'received'}`;
+        bubbleWrapper.setAttribute('data-message-id', msg.id);
+
+        bubbleWrapper.innerHTML = `
+            <div class="message-bubble">
+                ${msg.body.replace(/\n/g, '<br>')}
+            </div>
+            <span class="message-timestamp">
+                ${msg.created_at}
+            </span>
+        `;
+        chatArea.appendChild(bubbleWrapper);
+        scrollToBottom();
+    }
+
+    // Fetch new messages from backend API
+    async function checkNewMessages() {
+        if (lastMessageId === 0) return;
+        try {
+            const response = await fetch(`/messages/${conversationId}/updates/?last_id=${lastMessageId}`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.messages && data.messages.length > 0) {
+                    data.messages.forEach(msg => {
+                        appendMessage(msg);
+                    });
+                    updateLastMessageId();
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching updates:', error);
+        }
+    }
+
+    // Submit form via AJAX
+    async function handleSendMessage(e) {
+        if (e) e.preventDefault();
+        const bodyText = chatInput.value.trim();
+        if (!bodyText) return;
+
+        // Clear input immediately to make UI responsive
+        chatInput.value = '';
+        chatInput.style.height = 'auto';
+
+        const formData = new FormData(chatForm);
+        formData.set('body', bodyText);
+
+        try {
+            const response = await fetch(`/messages/${conversationId}/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status === 'success') {
+                    appendMessage(data.message);
+                    updateLastMessageId();
+                }
+            } else {
+                console.error('Failed to send message via AJAX. Falling back to reload.');
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+            window.location.reload();
+        }
+    }
+
     // Run on load
     window.addEventListener('DOMContentLoaded', () => {
+        updateLastMessageId();
         scrollToBottom();
         
         // Auto-resize textarea logic
-        const tx = document.getElementById('chatInput');
-        tx.addEventListener('input', function() {
+        chatInput.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
         });
 
+        // Intercept form submit
+        chatForm.addEventListener('submit', handleSendMessage);
+
         // Allow Enter to submit, Shift+Enter for new line
-        tx.addEventListener('keydown', function(e) {
+        chatInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                document.getElementById('chatForm').submit();
+                handleSendMessage();
             }
         });
+
+        // Set interval for checking new messages every 2.5 seconds
+        setInterval(checkNewMessages, 2500);
     });
 
     // Fill Quick reply
     function fillReply(chip) {
-        const tx = document.getElementById('chatInput');
-        tx.value = chip.textContent;
-        tx.focus();
-        tx.style.height = 'auto';
-        tx.style.height = (tx.scrollHeight) + 'px';
+        chatInput.value = chip.textContent;
+        chatInput.focus();
+        chatInput.style.height = 'auto';
+        chatInput.style.height = (chatInput.scrollHeight) + 'px';
     }
 </script>
 {% endblock %}

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q, Max
 from django.db.models.functions import Coalesce
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from django.contrib.auth import get_user_model
 from .models import Conversation, Message
 from listings.models import Listing
@@ -41,7 +41,7 @@ def conversation_view(request, pk):
         body = request.POST.get('body', '').strip()
         if body:
             # Create message
-            Message.objects.create(
+            msg = Message.objects.create(
                 conversation=conversation,
                 sender=request.user,
                 body=body
@@ -55,6 +55,19 @@ def conversation_view(request, pk):
                 title=f"New message from {request.user.username} about {listing_title}",
                 target_url=f"/messages/{conversation.pk}/"
             )
+            
+            # Check for AJAX request
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'success',
+                    'message': {
+                        'id': msg.id,
+                        'body': msg.body,
+                        'sender': msg.sender.username,
+                        'created_at': msg.created_at.strftime('%d %b, %H:%M')
+                    }
+                })
+                
             return redirect('messaging:conversation', pk=conversation.pk)
 
     # Get thread
@@ -67,6 +80,33 @@ def conversation_view(request, pk):
         'other_user': other_user,
         'listing': conversation.listing
     })
+
+@login_required
+def get_new_messages(request, pk):
+    conversation = get_object_or_404(Conversation, pk=pk)
+    
+    # Security check: only buyer or seller can access
+    if request.user != conversation.buyer and request.user != conversation.seller:
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+        
+    last_id = request.GET.get('last_id')
+    if not last_id:
+        return JsonResponse({'error': 'last_id parameter required'}, status=400)
+        
+    # Fetch messages newer than last_id
+    new_messages = conversation.messages.filter(id__gt=last_id)
+    
+    # Mark received messages as read
+    new_messages.exclude(sender=request.user).filter(is_read=False).update(is_read=True)
+    
+    messages_list = [{
+        'id': msg.id,
+        'body': msg.body,
+        'sender': msg.sender.username,
+        'created_at': msg.created_at.strftime('%d %b, %H:%M')
+    } for msg in new_messages]
+    
+    return JsonResponse({'messages': messages_list})
 
 @login_required
 def start_conversation_view(request, listing_id):
