@@ -529,16 +529,16 @@
                         <a class="nav-icon-btn" href="{% url 'listings:wishlist' %}" title="Wishlist">
                             <i data-lucide="heart" style="width: 1.125rem; height: 1.125rem;"></i>
                         </a>
-                        <a class="nav-icon-btn position-relative" href="{% url 'messaging:inbox' %}" title="Chats">
+                        <a class="nav-icon-btn position-relative" href="{% url 'messaging:inbox' %}" title="Chats" id="navChatBtn">
                             <i data-lucide="message-square" style="width: 1.125rem; height: 1.125rem;"></i>
                             {% if unread_message_count > 0 %}
-                                <span class="chat-badge">{{ unread_message_count }}</span>
+                                <span class="chat-badge" id="navChatBadge">{{ unread_message_count }}</span>
                             {% endif %}
                         </a>
-                        <a class="nav-icon-btn position-relative" href="{% url 'notifications:list' %}" title="Notifications">
+                        <a class="nav-icon-btn position-relative" href="{% url 'notifications:list' %}" title="Notifications" id="navNotificationBtn">
                             <i data-lucide="bell" style="width: 1.125rem; height: 1.125rem;"></i>
                             {% if unread_notification_count > 0 %}
-                                <span class="bell-badge">{{ unread_notification_count }}</span>
+                                <span class="bell-badge" id="navNotificationBadge">{{ unread_notification_count }}</span>
                             {% endif %}
                         </a>
                     </div>
@@ -626,5 +626,83 @@
         // Initialize Lucide Icons
         lucide.createIcons();
     </script>
+
+    {% if user.is_authenticated %}
+    <script>
+        // Fetch global unread counts periodically
+        async function updateGlobalUnreadCounts() {
+            try {
+                const response = await fetch("{% url 'notifications:unread_counts' %}");
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Desktop Messages
+                    const chatBtn = document.getElementById('navChatBtn');
+                    if (chatBtn) {
+                        let badge = document.getElementById('navChatBadge');
+                        if (data.unread_message_count > 0) {
+                            if (!badge) {
+                                badge = document.createElement('span');
+                                badge.className = 'chat-badge';
+                                badge.id = 'navChatBadge';
+                                chatBtn.appendChild(badge);
+                            }
+                            badge.textContent = data.unread_message_count;
+                        } else if (badge) {
+                            badge.remove();
+                        }
+                    }
+                    
+                    // Mobile Messages (bottom-nav-item)
+                    const mobileChatLink = document.querySelector('a[href*="/messages/"].bottom-nav-item');
+                    if (mobileChatLink) {
+                        let mobileBadge = mobileChatLink.querySelector('.badge');
+                        if (data.unread_message_count > 0) {
+                            if (!mobileBadge) {
+                                mobileBadge = document.createElement('span');
+                                mobileBadge.className = 'position-absolute top-0 start-50 translate-middle-y badge rounded-pill bg-danger';
+                                mobileBadge.style.fontSize = '0.6rem';
+                                mobileBadge.style.padding = '0.2em 0.4em';
+                                mobileBadge.style.marginLeft = '8px';
+                                mobileBadge.style.zIndex = '10';
+                                mobileChatLink.classList.add('position-relative');
+                                mobileChatLink.insertBefore(mobileBadge, mobileChatLink.querySelector('span'));
+                            }
+                            mobileBadge.textContent = data.unread_message_count;
+                            mobileBadge.style.display = 'inline-block';
+                        } else if (mobileBadge) {
+                            mobileBadge.remove();
+                        }
+                    }
+                    
+                    // Desktop Notifications
+                    const notifBtn = document.getElementById('navNotificationBtn');
+                    if (notifBtn) {
+                        let badge = document.getElementById('navNotificationBadge');
+                        if (data.unread_notification_count > 0) {
+                            if (!badge) {
+                                badge = document.createElement('span');
+                                badge.className = 'bell-badge';
+                                badge.id = 'navNotificationBadge';
+                                notifBtn.appendChild(badge);
+                            }
+                            badge.textContent = data.unread_notification_count;
+                        } else if (badge) {
+                            badge.remove();
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating unread counts:', error);
+            }
+        }
+        
+        // Run check on load and then every 8 seconds
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(updateGlobalUnreadCounts, 1000);
+            setInterval(updateGlobalUnreadCounts, 8000);
+        });
+    </script>
+    {% endif %}
 </body>
 </html>
