@@ -213,7 +213,8 @@
         transition: fill 0.2s ease, stroke 0.2s ease;
     }
 
-    .wishlist-heart-btn.saved svg {
+    .wishlist-heart-btn.saved svg,
+    .wishlist-heart-btn.saved i {
         fill: var(--accent) !important;
         stroke: var(--accent) !important;
     }
@@ -366,9 +367,9 @@
                         <button class="wishlist-heart-btn {% if listing.pk in wishlisted_ids %}saved{% endif %}" 
                                 data-listing-id="{{ listing.pk }}" 
                                 data-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
-                                onclick="event.preventDefault(); toggleWishlist(this, {{ listing.pk }});"
+                                onclick="event.preventDefault(); toggleWishlist(this);"
                                 title="Add to Wishlist">
-                            <i data-lucide="heart" style="width: 1rem; height: 1rem; {% if listing.pk in wishlisted_ids %}fill: var(--accent); stroke: var(--accent);{% endif %}"></i>
+                            <i data-lucide="heart" style="width: 1rem; height: 1rem;"></i>
                         </button>
                     </div>
                     
@@ -403,7 +404,8 @@
 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
 <script>
-function toggleWishlist(button, listingId) {
+function toggleWishlist(button) {
+    const listingId = button.getAttribute('data-listing-id');
     if (button.getAttribute('data-logged-in') === 'false') {
         window.location.href = "{% url 'login' %}?next=" + window.location.pathname;
         return;

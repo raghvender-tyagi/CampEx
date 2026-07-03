@@ -1,4 +1,6 @@
 from pathlib import Path
+from decouple import config
+
 
 # BASE_DIR ab ek level aur upar jana chahiye (.parent.parent.parent)
 # kyunki settings file config/settings/base.py mein hai
@@ -109,3 +111,16 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'listings:feed'
 LOGOUT_REDIRECT_URL = 'listings:feed'
+
+# Email Configuration
+EMAIL_HOST = config('EMAIL_HOST', default='')
+
+if EMAIL_HOST:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+    EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+    EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+    DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default=EMAIL_HOST_USER)
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

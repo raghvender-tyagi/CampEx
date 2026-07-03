@@ -30,5 +30,4 @@ else:
         }
     }
 
-# Development email backend
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Development email backend is defined dynamically in base.py

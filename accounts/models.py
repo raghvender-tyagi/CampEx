@@ -6,16 +6,27 @@ from django.dispatch import receiver
 
 # 1. Custom validator for College Email
 def validate_college_email(value):
-    allowed_domains = ['@kiet.edu', '@mycollege.in']
-    if not any(value.endswith(domain) for domain in allowed_domains):
+    allowed_suffixes = ['.edu', '.ac.in', '.edu.in', '.res.in']
+    if not any(value.lower().endswith(suffix) for suffix in allowed_suffixes):
         raise ValidationError(
-            f"Only emails from these domains are allowed: {', '.join(allowed_domains)}"
+            "Please register with a valid college email address (ending in .edu, .ac.in, or .edu.in)."
         )
 
 # 2. Custom User Model
 class CustomUser(AbstractUser):
     college_email = models.EmailField(unique=True, validators=[validate_college_email])
     is_verified = models.BooleanField(default=False)
+
+    @property
+    def college_name(self):
+        if self.college_email and '@' in self.college_email:
+            domain = self.college_email.split('@')[1]
+            parts = domain.split('.')
+            if len(parts) > 1:
+                # E.g. "kiet.edu" -> "KIET", "srm.ac.in" -> "SRM"
+                return parts[0].upper()
+            return domain.upper()
+        return "STUDENT"
 
     def __str__(self):
         return self.username

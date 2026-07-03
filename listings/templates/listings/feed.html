@@ -396,7 +396,8 @@
         color: #ff3b30;
     }
 
-    .heart-btn-new.saved svg {
+    .heart-btn-new.saved svg,
+    .heart-btn-new.saved i {
         fill: #ff3b30 !important;
         stroke: #ff3b30 !important;
         animation: pulse-heart 0.3s ease-in-out;
@@ -655,7 +656,7 @@
 <!-- Hero Section -->
 <div class="hero-section-new">
     <div class="college-badge-new">
-        <span>✓</span> KIET GHAZIABAD
+        <span>✓</span> {% if user.is_authenticated %}{{ user.college_name }}{% else %}VERIFIED CAMPUS{% endif %}
     </div>
     <h1 class="hero-headline-new">Campus <span class="exchange-gradient-text">Exchange</span></h1>
     <p class="hero-tagline-new">No more scrolling 40 unread WhatsApp messages to find a study table.</p>
@@ -836,9 +837,9 @@
                         <button class="heart-btn-new {% if listing.pk in wishlisted_ids %}saved{% endif %}" 
                                 data-listing-id="{{ listing.pk }}" 
                                 data-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
-                                onclick="event.preventDefault(); toggleWishlist(this, {{ listing.pk }});"
+                                onclick="event.preventDefault(); toggleWishlist(this);"
                                 title="Add to Wishlist">
-                            <i data-lucide="heart" style="width: 1rem; height: 1rem; {% if listing.pk in wishlisted_ids %}fill: #ff3b30; stroke: #ff3b30;{% endif %}"></i>
+                            <i data-lucide="heart" style="width: 1rem; height: 1rem;"></i>
                         </button>
                     </div>
                     
@@ -926,9 +927,9 @@
                         <button class="heart-btn-new {% if listing.pk in wishlisted_ids %}saved{% endif %}" 
                                 data-listing-id="{{ listing.pk }}" 
                                 data-logged-in="{% if user.is_authenticated %}true{% else %}false{% endif %}"
-                                onclick="event.preventDefault(); toggleWishlist(this, {{ listing.pk }});"
+                                onclick="event.preventDefault(); toggleWishlist(this);"
                                 title="Add to Wishlist">
-                            <i data-lucide="heart" style="width: 1rem; height: 1rem; {% if listing.pk in wishlisted_ids %}fill: #ff3b30; stroke: #ff3b30;{% endif %}"></i>
+                            <i data-lucide="heart" style="width: 1rem; height: 1rem;"></i>
                         </button>
                     </div>
                     
@@ -992,7 +993,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 450);
 });
 
-function toggleWishlist(button, listingId) {
+function toggleWishlist(button) {
+    const listingId = button.getAttribute('data-listing-id');
     if (button.getAttribute('data-logged-in') === 'false') {
         window.location.href = "{% url 'login' %}?next=" + window.location.pathname;
         return;

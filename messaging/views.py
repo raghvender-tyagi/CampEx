@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from accounts.decorators import verification_required
+
 from django.contrib import messages
 from django.db.models import Q, Max
 from django.db.models.functions import Coalesce
@@ -109,6 +111,7 @@ def get_new_messages(request, pk):
     return JsonResponse({'messages': messages_list})
 
 @login_required
+@verification_required
 def start_conversation_view(request, listing_id):
     if request.method != 'POST':
         return HttpResponseForbidden("Method not allowed")
@@ -127,6 +130,7 @@ def start_conversation_view(request, listing_id):
     return redirect('messaging:conversation', pk=conversation.pk)
 
 @login_required
+@verification_required
 def start_user_conversation_view(request, user_id):
     other_user = get_object_or_404(User, pk=user_id)
     if other_user == request.user:

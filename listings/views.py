@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from accounts.decorators import verification_required
+
 from django.contrib import messages
 from django.db.models import Q
 from .models import Category, Listing, ListingImage
@@ -75,6 +77,7 @@ def listing_detail(request, pk):
     return render(request, 'listings/detail.html', context)
 
 @login_required
+@verification_required
 def listing_create(request):
     if request.method == 'POST':
         form = ListingForm(request.POST)

@@ -13,12 +13,14 @@ class CampusExchangeBuyingTests(TestCase):
         self.user1 = User.objects.create_user(
             username='user1', 
             college_email='user1@kiet.edu', 
-            password='password123'
+            password='password123',
+            is_verified=True
         )
         self.user2 = User.objects.create_user(
             username='user2', 
             college_email='user2@mycollege.in', 
-            password='password123'
+            password='password123',
+            is_verified=True
         )
         
         # Create category
@@ -126,3 +128,20 @@ class CampusExchangeBuyingTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'user2')
         self.assertContains(response, 'Verified Student')
+
+    def test_unverified_user_blocked(self):
+        # Make user1 unverified
+        self.user1.is_verified = False
+        self.user1.save()
+        
+        # 1. Try to start user conversation
+        url = reverse('messaging:start_user_conversation', kwargs={'user_id': self.user2.pk})
+        response = self.client1.get(url) # Redirects because of verification required (or login_required)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('verification_pending'))
+        
+        # 2. Try to create listing
+        create_url = reverse('listings:create')
+        response = self.client1.get(create_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('verification_pending'))

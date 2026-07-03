@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Your Email - CampusEx{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+        <div class="card shadow p-4 p-md-5 text-center">
+            <div class="mb-4">
+                <div class="d-inline-flex align-items-center justify-content-center" style="width: 72px; height: 72px; border-radius: 50%; background-color: rgba(108, 99, 255, 0.1); border: 1px solid rgba(108, 99, 255, 0.2); color: var(--accent); margin: 0 auto;">
+                    <i data-lucide="mail-open" style="width: 2.25rem; height: 2.25rem; stroke-width: 1.5;"></i>
+                </div>
+                <h2 class="h2-title mt-4 mb-2">Verify Your Email Address</h2>
+                <p class="text-muted meta-text mb-0">Complete your registration to start using CampusEx</p>
+            </div>
+            
+            <div class="my-4 py-3 px-4 rounded-3 text-start" style="background-color: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                <p class="body-text mb-2 text-secondary">
+                    We sent a verification link to your registered college email:
+                </p>
+                <p class="h6-title mb-2 text-center" style="color: var(--accent); font-family: monospace; font-size: 1.1rem; letter-spacing: 0.02em;">
+                    {{ user.college_email }}
+                </p>
+                <p class="body-text mb-0 text-muted" style="font-size: 0.85rem;">
+                    Please check your inbox (and spam folder) and click on the verification link to activate your account.
+                </p>
+            </div>
+            
+            <div class="d-flex flex-column gap-3 mt-4">
+                <a href="{% url 'resend_verification' %}" class="btn btn-custom w-100 py-2.5 justify-content-center">
+                    <i data-lucide="send" style="width: 1.125rem; height: 1.125rem;"></i>
+                    <span>Resend Verification Email</span>
+                </a>
+                
+                <form action="{% url 'logout' %}" method="post" class="w-100">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-custom w-100 py-2.5 justify-content-center">
+                        <i data-lucide="log-out" style="width: 1.125rem; height: 1.125rem;"></i>
+                        <span>Log Out</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

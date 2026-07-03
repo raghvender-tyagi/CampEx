@@ -2,14 +2,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import CustomUserCreationForm
 
+from .utils import send_verification_email
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            send_verification_email(request, user)
             username = form.cleaned_data.get('username')
             # Success alert message
-            messages.success(request, f'Account created for {username}! You can now login.')
+            messages.success(request, f'Account created for {username}! A verification link has been sent to your college email.')
             return redirect('login')
     else:
         form = CustomUserCreationForm()
@@ -44,9 +47,7 @@ def public_profile(request, username):
     other_user = get_object_or_404(User, username=username)
     active_listings = other_user.listings.filter(status='available').order_by('-created_at')
     
-    allowed_domains = ['@kiet.edu', '@mycollege.in']
-    is_email_validated = any(other_user.college_email.endswith(domain) for domain in allowed_domains)
-    show_verified = other_user.is_active and is_email_validated
+    show_verified = other_user.is_active and other_user.is_verified
 
     wishlisted_ids = set()
     if request.user.is_authenticated:
@@ -60,3 +61,38 @@ def public_profile(request, username):
         'wishlisted_ids': wishlisted_ids,
     }
     return render(request, 'accounts/public_profile.html', context)
+
+
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.contrib.auth.tokens import default_token_generator
+
+def verify_email(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_verified = True
+        user.save()
+        messages.success(request, "Your email has been verified successfully! You can now log in.")
+        return redirect('login')
+    else:
+        messages.error(request, "The verification link is invalid or has expired.")
+        return redirect('register')
+
+@login_required
+def verification_pending(request):
+    if request.user.is_verified:
+        return redirect('listings:feed')
+    return render(request, 'accounts/verification_pending.html')
+
+@login_required
+def resend_verification(request):
+    if request.user.is_verified:
+        return redirect('listings:feed')
+    send_verification_email(request, request.user)
+    messages.success(request, "A new verification link has been sent to your college email.")
+    return redirect('verification_pending')
