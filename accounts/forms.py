@@ -63,3 +63,14 @@ class UserProfileForm(forms.ModelForm):
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 3}),
         }
+
+from django.contrib.auth.forms import AuthenticationForm
+
+class EmailOrUsernameAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = "Username or Email"
+        self.fields['username'].widget.attrs.update({
+            'placeholder': 'Enter your username or email'
+        })
+
