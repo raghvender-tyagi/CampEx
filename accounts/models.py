@@ -4,17 +4,13 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# 1. Custom validator for College Email
+# Placeholder validator to maintain backwards compatibility with old migrations
 def validate_college_email(value):
-    allowed_suffixes = ['.edu', '.ac.in', '.edu.in', '.res.in']
-    if not any(value.lower().endswith(suffix) for suffix in allowed_suffixes):
-        raise ValidationError(
-            "Please register with a valid college email address (ending in .edu, .ac.in, or .edu.in)."
-        )
+    pass
 
 # 2. Custom User Model
 class CustomUser(AbstractUser):
-    college_email = models.EmailField(unique=True, validators=[validate_college_email])
+    college_email = models.EmailField(unique=True)
     is_verified = models.BooleanField(default=False)
 
     @property
@@ -24,7 +20,11 @@ class CustomUser(AbstractUser):
             parts = domain.split('.')
             if len(parts) > 1:
                 # E.g. "kiet.edu" -> "KIET", "srm.ac.in" -> "SRM"
-                return parts[0].upper()
+                domain_name = parts[0].upper()
+                public_domains = ['GMAIL', 'YAHOO', 'OUTLOOK', 'HOTMAIL', 'ICLOUD', 'PROTON', 'PROTONMAIL', 'LIVE']
+                if domain_name in public_domains:
+                    return "STUDENT"
+                return domain_name
             return domain.upper()
         return "STUDENT"
 
